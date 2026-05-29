@@ -56,7 +56,6 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Lib>
-      <OutputFile>$(ProjectDir)Libs\DLPUtilLib2.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
@@ -92,7 +91,6 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Lib>
-      <OutputFile>$(ProjectDir)Libs\DLPUtilLib2Rel.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>

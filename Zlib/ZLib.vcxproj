@@ -52,7 +52,6 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Lib>
-      <OutputFile>$(ProjectDir)ZLib.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
@@ -60,7 +59,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)ZLib.lib" "$(SolutionDir)Libs\ZLib.lib" 2&gt;nul</Command>
+      <Command>copy /Y "$(OutDir)ZLib.lib" "$(SolutionDir)Libs\ZLib.lib" 2>nul</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <!-- Release configuration -->
@@ -85,7 +84,6 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
     </ClCompile>
     <Lib>
-      <OutputFile>$(ProjectDir)Release\ZLib.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Link>
@@ -95,7 +93,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)Release\ZLib.lib" "$(SolutionDir)Libs\ZLib.lib" 2&gt;nul</Command>
+      <Command>copy /Y "$(OutDir)ZLib.lib" "$(SolutionDir)Libs\ZLib.lib" 2>nul</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
