@@ -125,20 +125,6 @@
     <ClCompile Include="src\treeprint.cpp" />
     <ClCompile Include="src\uidmanager.cpp" />
     <ClCompile Include="src\uniqueid.cpp" />
-    <!-- zlib C files -->
-    <ClCompile Include="src\adler32.c" />
-    <ClCompile Include="src\COMPRESS.c" />
-    <ClCompile Include="src\CRC32.C" />
-    <ClCompile Include="src\DEFLATE.c" />
-    <ClCompile Include="src\INFBLOCK.c" />
-    <ClCompile Include="src\INFCODES.c" />
-    <ClCompile Include="src\INFFAST.c" />
-    <ClCompile Include="src\INFLATE.c" />
-    <ClCompile Include="src\INFTREES.c" />
-    <ClCompile Include="src\INFUTIL.c" />
-    <ClCompile Include="src\TREES.c" />
-    <ClCompile Include="src\UNCOMPR.c" />
-    <ClCompile Include="src\ZUTIL.c" />
     <!-- Extra source files from original vcproj that weren't listed but exist -->
     <ClCompile Include="src\dbquery.cpp" />
     <ClCompile Include="src\diskid32.cpp" />
