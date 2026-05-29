@@ -4,6 +4,10 @@
 // Windows API stubs for Linux/GCC builds
 // This file replaces windows.h for cross-platform compatibility
 
+// On Windows, use real windows.h; on Unix, provide stubs
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -613,4 +617,5 @@ inline void _tsplitpath(const char* path, char* drive, char* dir, char* fname, c
     }
 }
 
+#endif // _WIN32
 #endif // WINDOWS_H
