@@ -93,7 +93,7 @@ void CStr::NewFromString(const char *s, CPOS slen, CPOS prealloc)
 *			enough and is used only by us; otherwise, blkfrees the
 *			current instance and allocates a new one.
 *********************************************************************/ 
-void CStr:: operator = (const char *s)
+void CStr::operator = (const char *s)
 {
     // Check for zero length string.
     UINT     slen = strlen(s);
@@ -126,7 +126,7 @@ void CStr:: operator = (const char *s)
 *			enough and is used only by us; otherwise, blkfrees the
 *			current instance and allocates a new one.
 *********************************************************************/ 
-void CStr:: operator = (char *s)
+void CStr::operator = (char *s)
 {
     // Check for zero length string.
     UINT     slen = strlen(s);
@@ -159,7 +159,7 @@ void CStr:: operator = (char *s)
 * Purpose:	Copies a string into another string, destroying the
 *			previous content.
 *********************************************************************/ 
-void CStr:: operator = (const CStr &source)
+void CStr::operator = (const CStr &source)
 {
 	const char *s = source.data->m_Text;
 
@@ -194,7 +194,7 @@ void CStr:: operator = (const CStr &source)
 * Purpose:	Copies a string into another string, destroying the
 *			previous content.
 *********************************************************************/ 
-void CStr:: operator = (const CStr *source)
+void CStr::operator = (const CStr *source)
 {
 	const char *s = source->data->m_Text;
 
@@ -486,7 +486,7 @@ void  CStr::CoreAddChars(const char *s, CPOS howmany)
 * Proc:		CStr::operator += (both from const char* and from CStr)
 * Purpose:	Append a string to what we already contain.
 *********************************************************************/ 
-void CStr:: operator += (char nChar)
+void CStr::operator += (char nChar)
 {
 	this->AddChar(nChar);
 }
@@ -496,7 +496,7 @@ void CStr:: operator += (char nChar)
 * Proc:		CStr::operator += (both from const char* and from CStr)
 * Purpose:	Append a string to what we already contain.
 *********************************************************************/ 
-void CStr:: operator += (char *nChar)
+void CStr::operator += (char *nChar)
 {
 	UINT     slen = strlen(nChar);
     
@@ -510,7 +510,7 @@ void CStr:: operator += (char *nChar)
 * Proc:		CStr::operator += (both from const char* and from CStr)
 * Purpose:	Append a string to what we already contain.
 *********************************************************************/ 
-void CStr:: operator += (const CStr &obj)
+void CStr::operator += (const CStr &obj)
 {
     if (obj.data->m_Length != 0)
     {
@@ -522,7 +522,7 @@ void CStr:: operator += (const CStr &obj)
 * Proc:		CStr::operator += (both from const char* and from CStr)
 * Purpose:	Append a string to what we already contain.
 *********************************************************************/ 
-void CStr:: operator += (const char *s)
+void CStr::operator += (const char *s)
 {
     UINT     slen = strlen(s);
     

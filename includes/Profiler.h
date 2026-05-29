@@ -23,6 +23,9 @@ typedef long long __int64;
 #pragma warning( disable : 4244)
 #endif
 
+// Forward declare rdtsc_stub to avoid forward declaration issues
+uint64_t rdtsc_stub();
+
 class CProFileItem
 {
 private:
