@@ -1,0 +1,15 @@
+*.o
+*.a
+*.obj
+*.lib
+*.dll
+*.exe
+*.ilk
+*.pdb
+*.suo
+*.user
+*.vcxproj.user
+*.cache
+*.log
+*.tmp
+.DS_Store

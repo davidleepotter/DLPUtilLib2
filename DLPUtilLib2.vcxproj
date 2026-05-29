@@ -149,11 +149,52 @@
     <!-- memorymanager.cpp is in includes/ -->
     <ClCompile Include="includes\memorymanager.cpp" />
   </ItemGroup>
+  <!-- Force C compilation for .c files -->
+  <ItemGroup>
+    <ClCompile Include="src\adler32.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\COMPRESS.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\CRC32.C">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\DEFLATE.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\INFBLOCK.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\INFCODES.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\INFFAST.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\INFLATE.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\INFTREES.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\INFUTIL.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\TREES.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\UNCOMPR.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\ZUTIL.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+  </ItemGroup>
   <ItemGroup>
     <!-- Header Files -->
     <ClInclude Include="includes\ARACrypt.h" />
     <ClInclude Include="includes\BuildConfig.h" />
-    <ClInclude Include="includes\CallBack.h" />
     <ClInclude Include="includes\cstr.h" />
     <ClInclude Include="includes\DebugInfo.h" />
     <ClInclude Include="includes\DLP_Color.h" />
@@ -179,7 +220,6 @@
     <ClInclude Include="includes\trees.h" />
     <ClInclude Include="includes\uidmanager.h" />
     <ClInclude Include="includes\uniqueid.h" />
-    <ClInclude Include="includes\UtilDefines.h" />
     <ClInclude Include="includes\UtilHeader.h" />
     <ClInclude Include="includes\memorymanager.h" />
     <ClInclude Include="includes\netmutex.h" />

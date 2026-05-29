@@ -1,9 +1,17 @@
 #ifndef IO_H
 #define IO_H
 
-// io.h stub for Linux/GCC builds
-// Provides file I/O functions that replace Windows _open, _close, etc.
+// io.h stub for cross-platform compatibility
+// Provides file I/O functions that work on both Linux and Windows
 
+#ifdef _WIN32
+// Windows: use real io.h and fcntl.h from Windows SDK
+#include <io.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <direct.h>
+#else
+// Linux/GCC: use POSIX headers
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -47,5 +55,27 @@ inline int _stat(const char* pathname, struct stat* buf) {
 inline int _access(const char* pathname, int mode) {
     return access(pathname, mode);
 }
+
+inline int _unlink(const char* pathname) {
+    return unlink(pathname);
+}
+
+inline int _mkdir(const char* pathname) {
+    return mkdir(pathname, 0755);
+}
+
+inline int _rmdir(const char* pathname) {
+    return rmdir(pathname);
+}
+
+inline int _getcwd(char* buf, size_t size) {
+    return (getcwd(buf, size) != NULL) ? 0 : -1;
+}
+
+inline int _chdir(const char* pathname) {
+    return chdir(pathname);
+}
+
+#endif // _WIN32
 
 #endif // IO_H
