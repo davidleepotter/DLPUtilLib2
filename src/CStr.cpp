@@ -15,7 +15,6 @@
 #ifndef WIN32
 	#include <memory.h>
 	#include <ctype.h>
-	#include <sys/io.h>
 	#include <string.h>
 #endif
 

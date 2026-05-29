@@ -26,9 +26,7 @@ class DLP_CPtrArray;
 	#include <stdlib.h>
 	#include <stdarg.h>
 	#include "windows.h"
-	#define UINT unsigned int
-	#define BOOL bool
-	#define BYTE char
+	// Note: BOOL, BYTE, UINT are now provided by windows.h stub
 #endif
 
 #include <memory.h>

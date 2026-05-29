@@ -9,6 +9,7 @@
 #include <windows.h>
 #else
 #include <stdint.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,12 +19,46 @@
 #include <pthread.h>
 #include <unistd.h>
 
-// Basic types
-typedef uint8_t BYTE;
-typedef uint16_t WORD;
-typedef uint32_t DWORD;
-typedef int32_t LONG;
+// Conditionally include optional headers
+#ifdef __linux__
+#include <sys/ioctl.h>
+#endif
+
+// Guard against redefinition of common types
+#ifndef BOOL
 typedef int BOOL;
+#endif
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+// Guard against redefinition of CHAR
+#ifndef CHAR_DEFINED
+typedef char CHAR;
+#define CHAR_DEFINED
+#endif
+
+// Basic types (guarded against redefinition)
+#ifndef BYTE
+typedef uint8_t BYTE;
+#endif
+#ifndef WORD
+typedef uint16_t WORD;
+#endif
+#ifndef DWORD
+typedef uint32_t DWORD;
+#endif
+#ifndef LONG
+typedef int32_t LONG;
+#endif
+#ifndef UINT
+typedef unsigned int UINT;
+#endif
 typedef void* HANDLE;
 typedef void* FARPROC;
 typedef void* HMODULE;
@@ -35,9 +70,7 @@ typedef wchar_t WCHAR;
 typedef wchar_t* LPWSTR;
 typedef const wchar_t* LPCWSTR;
 typedef void* HWND;
-typedef char CHAR;
-typedef unsigned int UINT;
-typedef uint16_t USHORT;
+typedef unsigned int USHORT;
 typedef uint32_t ULONG;
 typedef uint8_t UCHAR;
 typedef unsigned char BOOLEAN;
@@ -46,6 +79,36 @@ typedef DWORD* LPDWORD;
 typedef void* LPOVERLAPPED;
 typedef void* LPSECURITY_ATTRIBUTES;
 typedef void* LPCRITICAL_SECTION;
+
+// CRITICAL_SECTION struct and related functions
+typedef struct _CRITICAL_SECTION {
+    void* DebugInfo;
+    LONG LockCount;
+    LONG RecursionCount;
+    HANDLE OwningThread;
+    HANDLE LockSemaphore;
+    uintptr_t SpinCount;
+} CRITICAL_SECTION, *PCRITICAL_SECTION, *LPCRITICAL_SECTION2;
+
+inline void InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection) {
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init((pthread_mutex_t*)lpCriticalSection, &attr);
+    pthread_mutexattr_destroy(&attr);
+}
+
+inline int EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection) {
+    return pthread_mutex_lock((pthread_mutex_t*)lpCriticalSection);
+}
+
+inline int LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection) {
+    return pthread_mutex_unlock((pthread_mutex_t*)lpCriticalSection);
+}
+
+inline void DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection) {
+    pthread_mutex_destroy((pthread_mutex_t*)lpCriticalSection);
+}
 
 // MSVC 64-bit integer types
 typedef long long __int64;
@@ -82,7 +145,7 @@ typedef struct tagPOINT {
     int y;
 } tagPOINT, *LPPOINT;
 
-// Constants
+// Constants (guarded against redefinition)
 #ifndef TRUE
 #define TRUE 1
 #endif

@@ -4,8 +4,11 @@
 // winioctl.h stub for Linux/GCC builds
 // Provides IOCTL constants for disk operations
 
+// Conditionally include Linux-specific headers
+#ifdef __linux__
 #include <sys/ioctl.h>
 #include <linux/fs.h>
+#endif
 
 // IOCTL constants
 #define IOCTL_DISK_GET_PARTITION_INFO 0x7404
