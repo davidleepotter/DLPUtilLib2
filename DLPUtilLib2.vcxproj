@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BDB2BAC1-57E2-4F9F-ADF3-0DE0EF88B420}</ProjectGuid>
+    <RootNamespace>DLPUtilLib2</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.0.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <!-- Debug configuration -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)includes;$(ProjectDir)includes\mysqlwin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(ProjectDir)Libs\DLPUtilLib2.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <!-- Release configuration -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)includes;$(ProjectDir)includes\mysqlwin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableFunctionLevelLinking>true</EnableFunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(ProjectDir)Libs\DLPUtilLib2Rel.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!-- Source Files -->
+    <ClCompile Include="src\ARACrypt.cpp" />
+    <ClCompile Include="src\BuildConfig.cpp" />
+    <ClCompile Include="src\CStr.cpp" />
+    <ClCompile Include="src\DBConPool.cpp" />
+    <ClCompile Include="src\DLPFile.cpp" />
+    <ClCompile Include="src\DLPRect.cpp" />
+    <ClCompile Include="src\DLP_Color.cpp" />
+    <ClCompile Include="src\DebugInfo.cpp" />
+    <ClCompile Include="src\FileInfo.cpp" />
+    <ClCompile Include="src\KeyAuthObj.cpp" />
+    <ClCompile Include="src\Markup.cpp" />
+    <ClCompile Include="src\NToklib.cpp" />
+    <ClCompile Include="src\NetMutex.cpp" />
+    <ClCompile Include="src\NetTimer.cpp" />
+    <ClCompile Include="src\NewCol.cpp" />
+    <ClCompile Include="src\OCRC32.cpp" />
+    <ClCompile Include="src\PoolObj.cpp" />
+    <ClCompile Include="src\Profiler.cpp" />
+    <ClCompile Include="src\stringpool.cpp" />
+    <ClCompile Include="src\TimerManObj.cpp" />
+    <ClCompile Include="src\treeprint.cpp" />
+    <ClCompile Include="src\uidmanager.cpp" />
+    <ClCompile Include="src\uniqueid.cpp" />
+    <!-- zlib C files -->
+    <ClCompile Include="src\adler32.c" />
+    <ClCompile Include="src\COMPRESS.c" />
+    <ClCompile Include="src\CRC32.C" />
+    <ClCompile Include="src\DEFLATE.c" />
+    <ClCompile Include="src\INFBLOCK.c" />
+    <ClCompile Include="src\INFCODES.c" />
+    <ClCompile Include="src\INFFAST.c" />
+    <ClCompile Include="src\INFLATE.c" />
+    <ClCompile Include="src\INFTREES.c" />
+    <ClCompile Include="src\INFUTIL.c" />
+    <ClCompile Include="src\TREES.c" />
+    <ClCompile Include="src\UNCOMPR.c" />
+    <ClCompile Include="src\ZUTIL.c" />
+    <!-- Extra source files from original vcproj that weren't listed but exist -->
+    <ClCompile Include="src\dbquery.cpp" />
+    <ClCompile Include="src\diskid32.cpp" />
+    <ClCompile Include="src\dlprnd.cpp" />
+    <ClCompile Include="src\driveInfo.cpp" />
+    <!-- memorymanager.cpp is in includes/ -->
+    <ClCompile Include="includes\memorymanager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Header Files -->
+    <ClInclude Include="includes\ARACrypt.h" />
+    <ClInclude Include="includes\BuildConfig.h" />
+    <ClInclude Include="includes\CallBack.h" />
+    <ClInclude Include="includes\cstr.h" />
+    <ClInclude Include="includes\DebugInfo.h" />
+    <ClInclude Include="includes\DLP_Color.h" />
+    <ClInclude Include="includes\DLPFile.h" />
+    <ClInclude Include="includes\DLPRect.h" />
+    <ClInclude Include="includes\dlprnd.h" />
+    <ClInclude Include="includes\driveinfo.h" />
+    <ClInclude Include="includes\drivestructs.h" />
+    <ClInclude Include="includes\FileInfo.h" />
+    <ClInclude Include="includes\FileTransfer.h" />
+    <ClInclude Include="includes\GenNetMsg.h" />
+    <ClInclude Include="includes\KeyAuthObj.h" />
+    <ClInclude Include="includes\Markup.h" />
+    <ClInclude Include="includes\NewCol.h" />
+    <ClInclude Include="includes\ntoklib.h" />
+    <ClInclude Include="includes\objectcount.h" />
+    <ClInclude Include="includes\ocrc32.h" />
+    <ClInclude Include="includes\PoolObj.h" />
+    <ClInclude Include="includes\Profiler.h" />
+    <ClInclude Include="includes\stringpool.h" />
+    <ClInclude Include="includes\timermanobj.h" />
+    <ClInclude Include="includes\treeprint.h" />
+    <ClInclude Include="includes\trees.h" />
+    <ClInclude Include="includes\uidmanager.h" />
+    <ClInclude Include="includes\uniqueid.h" />
+    <ClInclude Include="includes\UtilDefines.h" />
+    <ClInclude Include="includes\UtilHeader.h" />
+    <ClInclude Include="includes\memorymanager.h" />
+    <ClInclude Include="includes\netmutex.h" />
+    <ClInclude Include="includes\nettimer.h" />
+    <ClInclude Include="includes\dbase.h" />
+    <ClInclude Include="includes\dbconpool.h" />
+    <ClInclude Include="includes\dbquery.h" />
+    <ClInclude Include="includes\io.h" />
+    <ClInclude Include="includes\tchar.h" />
+    <!-- zlib headers -->
+    <ClInclude Include="includes\deflate.h" />
+    <ClInclude Include="includes\infblock.h" />
+    <ClInclude Include="includes\infcodes.h" />
+    <ClInclude Include="includes\inffast.h" />
+    <ClInclude Include="includes\inffixed.h" />
+    <ClInclude Include="includes\inftrees.h" />
+    <ClInclude Include="includes\infutil.h" />
+    <ClInclude Include="includes\zconf.h" />
+    <ClInclude Include="includes\zlib.h" />
+    <ClInclude Include="includes\zutil.h" />
+    <!-- Windows compatibility -->
+    <ClInclude Include="includes\windows.h" />
+    <ClInclude Include="includes\windows_stub.h" />
+    <ClInclude Include="includes\winioctl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Lib Include="Libs\libmysql.lib" />
+    <Lib Include="Libs\ZLib.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
