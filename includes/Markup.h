@@ -8,8 +8,9 @@
 
 #define MARKUP_SETDEBUGSTATE
 
+#include <vector>
+
 class CStr;
-class DLP_CPtrArray;
 
 class CMarkup  
 {
@@ -92,7 +93,7 @@ protected:
 	};
 
 	//CArray< ElemPos, ElemPos& > m_aPos;
-	DLP_CPtrArray *m_aPos;
+	std::vector<ElemPos> m_aPos;
 	int m_iPosParent;
 	int m_iPos;
 	int m_iPosChild;

@@ -15,7 +15,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <windows.h>
-#include "utilheader.h"
+#include "UtilHeader.h"
 #include <winioctl.h>
 #include <drivestructs.h>
 
@@ -664,9 +664,9 @@ void CDriveInfo::vPrintIdeInfo(int drive, DWORD diskdata [256])
 		//  48 bit addressing is reflected by bit 10 of word 83
 	if (diskdata [83] & 0x400) 
 	{
-		sectors = diskdata [103] * 65536I64 * 65536I64 * 65536I64 + 
-					diskdata [102] * 65536I64 * 65536I64 + 
-					diskdata [101] * 65536I64 + 
+		sectors = diskdata [103] * 65536LL * 65536LL * 65536LL + 
+					diskdata [102] * 65536LL * 65536LL + 
+					diskdata [101] * 65536LL + 
 					diskdata [100];
 	}
 	else

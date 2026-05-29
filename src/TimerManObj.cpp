@@ -11,8 +11,8 @@
 #include "utildefines.h"
 #include "timermanobj.h"
 #include "nettimer.h"
-#include "debuginfo.h"
-#include "newcol.h"
+#include "DebugInfo.h"
+#include "NewCol.h"
 
 //////////////////////////////////////////////////////
 //

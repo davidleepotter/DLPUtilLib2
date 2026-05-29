@@ -89,15 +89,42 @@ typedef struct _IDSECTOR
 } IDSECTOR, *PIDSECTOR;
 
 
-typedef struct _SRB_IO_CONTROL
-{
-   ULONG HeaderLength;
-   UCHAR Signature[8];
-   ULONG Timeout;
-   ULONG ControlCode;
-   ULONG ReturnCode;
-   ULONG Length;
+#ifndef _SRB_IO_CONTROL_DEFINED
+typedef struct _SRB_IO_CONTROL {
+    ULONG HeaderLength;
+    UCHAR Signature[8];
+    ULONG Timeout;
+    ULONG ControlCode;
+    ULONG ReturnCode;
+    ULONG Length;
+    ULONG StartingSector;
+    union {
+        ULONG ClusterCount;
+        ULONG Reserved;
+    };
+    UCHAR DataBuffer[1];
 } SRB_IO_CONTROL, *PSRB_IO_CONTROL;
+#define _SRB_IO_CONTROL_DEFINED
+#endif
+
+#ifndef _STORAGE_DEVICE_DESCRIPTOR_DEFINED
+typedef struct _STORAGE_DEVICE_DESCRIPTOR {
+    ULONG Size;
+    UCHAR DeviceType;
+    UCHAR DeviceTypeModifier;
+    BOOLEAN RemovableMedia;
+    BOOLEAN CommandQueueing;
+    ULONG VendorIdOffset;
+    ULONG ProductIdOffset;
+    ULONG ProductRevisionOffset;
+    ULONG SerialNumberOffset;
+    ULONG BusType;
+    ULONG RawPropertiesLength;
+    UCHAR RawDeviceProperties[1];
+} STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
+#define _STORAGE_DEVICE_DESCRIPTOR_DEFINED
+#endif
+
 
 
    // Define global buffers.
@@ -185,114 +212,193 @@ typedef struct _STORAGE_PROPERTY_QUERY {
 
 
 //
-// Device property descriptor - this is really just a rehash of the inquiry
-// data retrieved from a scsi device
+// ORPHANED: #if 0  // [disabled: duplicate of windows.h]
+//// Device property descriptor - this is really just a rehash of the inquiry
+
+//// data retrieved from a scsi device
+
+////
+
+//// This may only be retrieved from a target device.  Sending this to the bus
+
+//// will result in an error
+
+////
+
 //
-// This may only be retrieved from a target device.  Sending this to the bus
-// will result in an error
+////
+
+//// Sizeof(STORAGE_DEVICE_DESCRIPTOR)
+
+////
+
 //
+//ULONG Version;
 
-typedef struct _STORAGE_DEVICE_DESCRIPTOR {
+//
+////
 
-    //
-    // Sizeof(STORAGE_DEVICE_DESCRIPTOR)
-    //
+//// Total size of the descriptor, including the space for additional
 
-    ULONG Version;
+//// data and id strings
 
-    //
-    // Total size of the descriptor, including the space for additional
-    // data and id strings
-    //
+////
 
-    ULONG Size;
+//
+//ULONG Size;
 
-    //
-    // The SCSI-2 device type
-    //
+//
+////
 
-    UCHAR DeviceType;
+//// The SCSI-2 device type
 
-    //
-    // The SCSI-2 device type modifier (if any) - this may be zero
-    //
+////
 
-    UCHAR DeviceTypeModifier;
+//
+//UCHAR DeviceType;
 
-    //
-    // Flag indicating whether the device's media (if any) is removable.  This
-    // field should be ignored for media-less devices
-    //
+//
+////
 
-    BOOLEAN RemovableMedia;
+//// The SCSI-2 device type modifier (if any) - this may be zero
 
-    //
-    // Flag indicating whether the device can support mulitple outstanding
-    // commands.  The actual synchronization in this case is the responsibility
-    // of the port driver.
-    //
+////
 
-    BOOLEAN CommandQueueing;
+//
+//UCHAR DeviceTypeModifier;
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // vendor id string.  For devices with no such ID this will be zero
-    //
+//
+////
 
-    ULONG VendorIdOffset;
+//// Flag indicating whether the device's media (if any) is removable.  This
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // product id string.  For devices with no such ID this will be zero
-    //
+//// field should be ignored for media-less devices
 
-    ULONG ProductIdOffset;
+////
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // product revision string.  For devices with no such string this will be
-    // zero
-    //
+//
+//BOOLEAN RemovableMedia;
 
-    ULONG ProductRevisionOffset;
+//
+////
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // serial number.  For devices with no serial number this will be zero
-    //
+//// Flag indicating whether the device can support mulitple outstanding
 
-    ULONG SerialNumberOffset;
+//// commands.  The actual synchronization in this case is the responsibility
 
-    //
-    // Contains the bus type (as defined above) of the device.  It should be
-    // used to interpret the raw device properties at the end of this structure
-    // (if any)
-    //
+//// of the port driver.
 
-    //STORAGE_BUS_TYPE BusType;
+////
 
-    //
-    // The number of bytes of bus-specific data which have been appended to
-    // this descriptor
-    //
+//
+//BOOLEAN CommandQueueing;
 
-    ULONG RawPropertiesLength;
+//
+////
 
-    //
-    // Place holder for the first byte of the bus specific property data
-    //
+//// Byte offset to the zero-terminated ascii string containing the device's
 
-    UCHAR RawDeviceProperties[1];
+//// vendor id string.  For devices with no such ID this will be zero
 
-} STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
+////
+
+//
+//ULONG VendorIdOffset;
+
+//
+////
+
+//// Byte offset to the zero-terminated ascii string containing the device's
+
+//// product id string.  For devices with no such ID this will be zero
+
+////
+
+//
+//ULONG ProductIdOffset;
+
+//
+////
+
+//// Byte offset to the zero-terminated ascii string containing the device's
+
+//// product revision string.  For devices with no such string this will be
+
+//// zero
+
+////
+
+//
+//ULONG ProductRevisionOffset;
+
+//
+////
+
+//// Byte offset to the zero-terminated ascii string containing the device's
+
+//// serial number.  For devices with no serial number this will be zero
+
+////
+
+//
+//ULONG SerialNumberOffset;
+
+//
+////
+
+//// Contains the bus type (as defined above) of the device.  It should be
+
+//// used to interpret the raw device properties at the end of this structure
+
+//// (if any)
+
+////
+
+//
+////STORAGE_BUS_TYPE BusType;
+
+//
+////
+
+//// The number of bytes of bus-specific data which have been appended to
+
+//// this descriptor
+
+////
+
+//
+//ULONG RawPropertiesLength;
+
+//
+////
+
+//// Place holder for the first byte of the bus specific property data
+
+////
+
+//
+//UCHAR RawDeviceProperties[1];
+
+//
+//} STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
+
+// #endif
 
 
-typedef struct _MEDIA_SERAL_NUMBER_DATA {
-  ULONG  SerialNumberLength; 
-  ULONG  Result;
-  ULONG  Reserved[2];
-  UCHAR  SerialNumberData[1];
-} MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;
+// ORPHANED: #if 0  // [disabled: duplicate of windows.h]
+//typedef struct _MEDIA_SERAL_NUMBER_DATA {
+
+//ULONG  SerialNumberLength; 
+
+//ULONG  Result;
+
+//ULONG  Reserved[2];
+
+//UCHAR  SerialNumberData[1];
+
+//} MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;
+
+// #endif
 
 
    // (* Output Bbuffer for the VxD (rt_IdeDinfo record) *)

@@ -8,7 +8,7 @@
 *
 *	Date: 11/18/2002
 *********************************************************************/
-#include "utilheader.h"
+#include "UtilHeader.h"
 
 
 //////////////////////////////////////////////////////
@@ -385,8 +385,8 @@ void CUIDManager::vCalcDChar(unsigned long uVal,unsigned char *nUID0,unsigned ch
 	unsigned char u1 = 0;
 	unsigned char u2 = 0;
 
-	u1 = unsigned char(uVal/255);
-	u2 = unsigned char(uVal - (u1*255));
+	u1 = (unsigned char)(uVal/255);
+	u2 = (unsigned char)(uVal - (u1*255));
 
 	*nUID0 = u1;
 	*nUID1 = u2;

@@ -66,7 +66,7 @@ CProFileItem::~CProFileItem()
 void CProFileItem::vEnter(void)
 {
 	//Use local variable to reference class member
-	unsigned __int64 nStart = 0;	
+	uint64_t nStart = 0;	
 
 	__asm cpuid						
 	__asm rdtsc						
@@ -83,7 +83,7 @@ void CProFileItem::vEnter(void)
 //////////////////////////////////////////////////////
 void CProFileItem::vExit(void)
 {
-	unsigned __int64 nEnd = 0;	//End cycle count
+	uint64_t nEnd = 0;	//End cycle count
 
 	__asm cpuid					
 	__asm rdtsc					

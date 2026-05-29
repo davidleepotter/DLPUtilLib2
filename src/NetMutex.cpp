@@ -11,7 +11,7 @@
 
 #include "netmutex.h"
 #include "utildefines.h"
-#include "debuginfo.h"
+#include "DebugInfo.h"
 #include "cstr.h"
 
 long CNetMutex::uID = 0;

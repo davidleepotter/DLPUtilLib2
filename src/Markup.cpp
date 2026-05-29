@@ -1,6 +1,6 @@
 
-#include "CStr.h"
-#include "newcol.h"
+#include "cstr.h"
+#include "NewCol.h"
 #include "Markup.h"
 
 #ifdef _MBCS
@@ -73,9 +73,9 @@ bool CMarkup::SetDoc( char * szDoc )
 	// Tight fit when parsing small doc, only 0 to 2 reallocs when parsing large doc
 	// Start at 8 when creating new document
 	int nStartSize = m_csDoc->GetLength() / 64 + 8;
-	if ( m_aPos->nGetSize() < nStartSize )
+	if ( m_aPos.size() < nStartSize )
 	{
-		m_aPos->vSetSize( nStartSize );
+		m_aPos.resize( nStartSize );
 	}
 
 	// Parse document
@@ -107,7 +107,7 @@ bool CMarkup::SetDoc( char * szDoc )
 bool CMarkup::IsWellFormed()
 {
 	//FIXARRAY
-	//if ( m_aPos->nGetSize() && m_aPos[0].iElemChild )
+	//if ( m_aPos.size() && m_aPos[0].iElemChild )
 	//{
 	//	return true;
 	//}
@@ -118,7 +118,7 @@ bool CMarkup::FindElem( char * szName )
 {
 	// Change current position only if found
 	//
-	if ( m_aPos->nGetSize() )
+	if ( m_aPos.size() )
 	{
 		int iPos = x_FindElem( m_iPosParent, m_iPos, szName );
 		if ( iPos )
@@ -477,8 +477,10 @@ CStr * CMarkup::x_GetToken( const CMarkup::TokenPos& token ) const
 	{
 		return 0;
 	}
-	return m_csDoc->Mid( token.nL,
+	CStr *result = new CStr;
+	result->Mid( token.nL,
 		token.nR - token.nL + ((token.nR<m_csDoc->GetLength())? 1:0) );
+	return result;
 }
 
 int CMarkup::x_FindElem( int iPosParent, int iPos, char * szPath )
@@ -496,7 +498,7 @@ int CMarkup::x_FindElem( int iPosParent, int iPos, char * szPath )
 		return iPos;
 
 	// Search
-	TokenPos token( m_csDoc );
+	TokenPos token( m_csDoc->GetString() );
 	while ( iPos )
 	{
 		// Compare tag name
@@ -586,7 +588,7 @@ int CMarkup::x_ParseNode( CMarkup::TokenPos& token )
 		// Search for end of node if not found yet
 		if ( szEndOfNode )
 		{
-			char * pEnd = _tcsstr( &szDoc[token.nNext], szEndOfNode );
+			char * pEnd = const_cast<char*>(_tcsstr( &szDoc[token.nNext], szEndOfNode ));
 			if ( ! pEnd )
 				return 0; // not well-formed
 			token.nNext = (pEnd - szDoc) + _tcslen(szEndOfNode);
@@ -612,10 +614,10 @@ int CMarkup::x_ParseNode( CMarkup::TokenPos& token )
 CStr * CMarkup::x_GetTagName( int iPos ) const
 {
 	// Return the tag name at specified element
-	TokenPos token( m_csDoc );
+	TokenPos token( m_csDoc->GetString() );
 	token.nNext = m_aPos[iPos].nStartL + 1;
 	if ( ! iPos || ! x_FindToken( token ) )
-		return "";
+		return new CStr("");
 
 	// Return substring of document
 	return x_GetToken( token );
@@ -631,7 +633,7 @@ bool CMarkup::x_FindAttrib( CMarkup::TokenPos& token, char * szAttrib ) const
 		if ( ! token.bIsString )
 		{
 			// Is it the right angle bracket?
-			char cChar = m_csDoc[token.nL];
+			char cChar = m_csDoc->GetString()[token.nL];
 			if ( cChar == '>' || cChar == '/' || cChar == '?' )
 				break; // attrib not found
 
@@ -664,21 +666,25 @@ bool CMarkup::x_FindAttrib( CMarkup::TokenPos& token, char * szAttrib ) const
 CStr * CMarkup::x_GetAttrib( int iPos, char * szAttrib ) const
 {
 	// Return the value of the attrib
-	TokenPos token( m_csDoc );
+	TokenPos token( m_csDoc->GetString() );
 	if ( iPos && m_nNodeType == MNT_ELEMENT )
 		token.nNext = m_aPos[iPos].nStartL + 1;
 	else
-		return "";
+		return new CStr("");
 
 	if ( szAttrib && x_FindAttrib( token, szAttrib ) )
-		return x_TextFromDoc( token.nL, token.nR - ((token.nR<m_csDoc->GetLength())?0:1) );
-	return "";
+	{
+		CStr *result = new CStr;
+		result->Mid( token.nL, token.nR - ((token.nR<m_csDoc->GetLength())?0:1) );
+		return result;
+	}
+	return new CStr("");
 }
 
 bool CMarkup::x_SetAttrib( int iPos, char * szAttrib, char * szValue )
 {
 	// Set attribute in iPos element
-	TokenPos token( m_csDoc );
+	TokenPos token( m_csDoc->GetString() );
 	int nInsertAt;
 	if ( iPos && m_nNodeType == MNT_ELEMENT )
 	{
@@ -706,7 +712,7 @@ bool CMarkup::x_SetAttrib( int iPos, char * szAttrib, char * szValue )
 		csFormat = " ";
 		csFormat += szAttrib;
 		csFormat += "=\"";
-		csFormat += x_TextToDoc( szValue, true );
+		csFormat += x_TextToDoc( szValue, true )->GetString();
 		csFormat += "\"";
 		csInsert = csFormat;
 	}
@@ -738,12 +744,12 @@ CStr * CMarkup::x_GetData( int iPos ) const
 			int nEndCDATA = m_csDoc->Find( "]]>", nChar );
 			if ( nEndCDATA != -1 && nEndCDATA < m_aPos[iPos].nEndL )
 			{
-				return m_csDoc->Mid( nChar, nEndCDATA - nChar );
+				CStr *result = new CStr; result->Mid( nChar, nEndCDATA - nChar ); return result;
 			}
 		}
-		return x_TextFromDoc( m_aPos[iPos].nStartR+1, m_aPos[iPos].nEndL-1 );
+		CStr *result = new CStr; result->Mid( m_aPos[iPos].nStartR+1, m_aPos[iPos].nEndL-1 - m_aPos[iPos].nStartR-1 ); return result;
 	}
-	return "";
+	return new CStr("");
 }
 
 CStr * CMarkup::x_TextToDoc( char * szText, bool bAttrib ) const
@@ -761,7 +767,7 @@ CStr * CMarkup::x_TextToDoc( char * szText, bool bAttrib ) const
 	// &apos; apostrophe or single quote
 	// &quot; double quote
 	//
-	static char* szaReplace[] = { "&lt;","&amp;","&gt;","&apos;,"&quot;" };
+	static char* szaReplace[] = { "&lt;","&amp;","&gt;","&apos;","&quot;" };
 	const char* pFind = bAttrib?"<&>\'\"":"<&>";
 	CStr csText;
 	const char* pSource = szText;
@@ -779,7 +785,7 @@ CStr * CMarkup::x_TextToDoc( char * szText, bool bAttrib ) const
 			nDestSize *= 2;
 			pDest = csText.GetBuffer(nDestSize);
 		}
-		if ( (pFound=strchr(pFind,cSource)) != NULL )
+		if ( (pFound=strchr(const_cast<char*>(pFind),cSource)) != NULL )
 		{
 			pFound = szaReplace[pFound-pFind];
 			_tcscpy(&pDest[nLen],pFound);
@@ -794,7 +800,7 @@ CStr * CMarkup::x_TextToDoc( char * szText, bool bAttrib ) const
 		cSource = *pSource;
 	}
 	csText.ReleaseBuffer(nLen);
-	return csText;
+	return new CStr(csText);
 }
 
 CStr * CMarkup::x_TextFromDoc( int nLeft, int nRight ) const
@@ -807,7 +813,7 @@ CStr * CMarkup::x_TextFromDoc( int nLeft, int nRight ) const
 	static int anCodeLen[] = { 3,4,3,5,5 };
 	static char* szSymbol = "<&>\'\"";
 	CStr csText;
-	const char* pSource = m_csDoc;
+	const char* pSource = m_csDoc->GetString();
 	int nDestSize = nRight - nLeft + 1;
 	char* pDest = csText.GetBuffer(nDestSize);
 	int nLen = 0;
@@ -848,7 +854,7 @@ CStr * CMarkup::x_TextFromDoc( int nLeft, int nRight ) const
 		}
 	}
 	csText.ReleaseBuffer(nLen);
-	return csText;
+	return new CStr(csText);
 }
 
 void CMarkup::x_DocChange( int nLeft, int nReplace, const CStr& csInsert )
@@ -860,8 +866,8 @@ void CMarkup::x_DocChange( int nLeft, int nReplace, const CStr& csInsert )
 	int nInsLength = csInsert.GetLength();
 
 	// Make sure nLeft and nReplace are within bounds
-	nLeft = max( 0, min( nLeft, nDocLength ) );
-	nReplace = max( 0, min( nReplace, nDocLength-nLeft ) );
+	nLeft = DLP_max( 0, DLP_min( nLeft, nDocLength ) );
+	nReplace = DLP_max( 0, DLP_min( nReplace, nDocLength-nLeft ) );
 
 	// Get pointer to buffer with enough room
 	int nNewLength = nInsLength + nDocLength - nReplace;
@@ -873,7 +879,7 @@ void CMarkup::x_DocChange( int nLeft, int nReplace, const CStr& csInsert )
 		memmove( &pDoc[nLeft+nInsLength], &pDoc[nLeft+nReplace], (nDocLength-nLeft-nReplace)*sizeof(char) );
 
 	// Copy insert
-	memcpy( &pDoc[nLeft], csInsert, nInsLength*sizeof(char) );
+	memcpy( &pDoc[nLeft], csInsert.GetString(), nInsLength*sizeof(char) );
 
 	// Release
 	m_csDoc->ReleaseBuffer( nNewLength );
@@ -1104,7 +1110,7 @@ bool CMarkup::x_AddElem( char * szName, char * szValue, bool bInsert, bool bAddC
 	else
 	{
 		// <NAME>value</NAME>
-		CStr csValue = x_TextToDoc( szValue );
+		CStr csValue(*x_TextToDoc( szValue ));
 		nLenValue = csValue.GetLength();
 		csInsert = "<";
 		csInsert += szName;
@@ -1122,7 +1128,7 @@ bool CMarkup::x_AddElem( char * szName, char * szValue, bool bInsert, bool bAddC
 	int nReplace = 0, nLeft = m_aPos[iPos].nStartL;
 	if ( bEmptyParent )
 	{
-		CStr csParentTagName = x_GetTagName(iPosParent);
+		CStr csParentTagName(*x_GetTagName(iPosParent));
 		CStr csFormat;
 		csFormat = ">\r\n";
 		csFormat += csInsert;

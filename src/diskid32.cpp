@@ -14,7 +14,13 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
+#include <ctype.h>
 #include <windows.h>
+
+// #ifndef __int64 (removed)
+#define __int64 long long
+// #endif (removed)
+
 
 //#include <ntddk.h>
 //#include <ntddstor.h>
@@ -175,6 +181,8 @@ typedef struct _IDSECTOR
 } IDSECTOR, *PIDSECTOR;
 
 
+// #ifndef _SRB_IO_CONTROL_DEFINED (removed)
+#ifndef _SRB_IO_CONTROL_DEFINED
 typedef struct _SRB_IO_CONTROL
 {
    ULONG HeaderLength;
@@ -184,6 +192,9 @@ typedef struct _SRB_IO_CONTROL
    ULONG ReturnCode;
    ULONG Length;
 } SRB_IO_CONTROL, *PSRB_IO_CONTROL;
+#define _SRB_IO_CONTROL_DEFINED
+#endif
+// #endif (removed)
 
 
    // Define global buffers.
@@ -368,103 +379,116 @@ typedef struct _STORAGE_PROPERTY_QUERY {
 // will result in an error
 //
 
-typedef struct _STORAGE_DEVICE_DESCRIPTOR {
+// STORAGE_DEVICE_DESCRIPTOR already defined in windows.h - skipping duplicate
+// typedef struct _STORAGE_DEVICE_DESCRIPTOR {
+//
+//
+//     //
+//     // Sizeof(STORAGE_DEVICE_DESCRIPTOR)
+//     //
+//
+//     ULONG Version;
+//
+//     //
+//     // Total size of the descriptor, including the space for additional
+//     // data and id strings
+//     //
+//
+//     ULONG Size;
+//
+//     //
+//     // The SCSI-2 device type
+//     //
+//
+//     UCHAR DeviceType;
+//
+//     //
+//     // The SCSI-2 device type modifier (if any) - this may be zero
+//     //
+//
+//     UCHAR DeviceTypeModifier;
+//
+//     //
+//     // Flag indicating whether the device's media (if any) is removable.  This
+//     // field should be ignored for media-less devices
+//     //
+//
+//     BOOLEAN RemovableMedia;
+//
+//     //
+//     // Flag indicating whether the device can support mulitple outstanding
+//     // commands.  The actual synchronization in this case is the responsibility
+//     // of the port driver.
+//     //
+//
+//     BOOLEAN CommandQueueing;
+//
+//     //
+//     // Byte offset to the zero-terminated ascii string containing the device's
+//     // vendor id string.  For devices with no such ID this will be zero
+//     //
+//
+//     ULONG VendorIdOffset;
+//
+//     //
+//     // Byte offset to the zero-terminated ascii string containing the device's
+//     // product id string.  For devices with no such ID this will be zero
+//     //
+//
+//     ULONG ProductIdOffset;
+//
+//     //
+//     // Byte offset to the zero-terminated ascii string containing the device's
+//     // product revision string.  For devices with no serial number this will be
+//     // zero
+//     //
+//
+//     ULONG ProductRevisionOffset;
+//
+//     //
+//     // Byte offset to the zero-terminated ascii string containing the device's
+//     // serial number.  For devices with no serial number this will be zero
+//     //
+//
+//     ULONG SerialNumberOffset;
+//
+//     //
+//     // Contains the bus type (as defined above) of the device.  It should be
+//     // used to interpret the raw device properties at the end of this structure
+//     // (if any)
+//     //
+//
+//     STORAGE_BUS_TYPE BusType;
+//
+//     //
+//     // The number of bytes of bus-specific data which have been appended to
+//     // this descriptor
+//     //
+//
+//     ULONG RawPropertiesLength;
+//
+//     //
+//     // Place holder for the first byte of the bus specific property data
+//     //
+//
+//     UCHAR RawDeviceProperties[1];
+//
+// } STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
 
-    //
-    // Sizeof(STORAGE_DEVICE_DESCRIPTOR)
-    //
+#ifndef _MEDIA_SERIAL_NUMBER_DATA_DEFINED
+// MEDIA_SERIAL_NUMBER_DATA already defined in windows.h - skipping duplicate
+// typedef struct _MEDIA_SERIAL_NUMBER_DATA {
+//   ULONG  SerialNumberLength; 
+//   ULONG  Result;
+//   ULONG  Reserved[2];
+//   UCHAR  SerialNumberData[1];
+// } MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;
+// #define _MEDIA_SERIAL_NUMBER_DATA_DEFINED
+// #endif
+#endif // _MEDIA_SERIAL_NUMBER_DATA_DEFINED
 
-    ULONG Version;
-
-    //
-    // Total size of the descriptor, including the space for additional
-    // data and id strings
-    //
-
-    ULONG Size;
-
-    //
-    // The SCSI-2 device type
-    //
-
-    UCHAR DeviceType;
-
-    //
-    // The SCSI-2 device type modifier (if any) - this may be zero
-    //
-
-    UCHAR DeviceTypeModifier;
-
-    //
-    // Flag indicating whether the device's media (if any) is removable.  This
-    // field should be ignored for media-less devices
-    //
-
-    BOOLEAN RemovableMedia;
-
-    //
-    // Flag indicating whether the device can support mulitple outstanding
-    // commands.  The actual synchronization in this case is the responsibility
-    // of the port driver.
-    //
-
-    BOOLEAN CommandQueueing;
-
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // vendor id string.  For devices with no such ID this will be zero
-    //
-
-    ULONG VendorIdOffset;
-
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // product id string.  For devices with no such ID this will be zero
-    //
-
-    ULONG ProductIdOffset;
-
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // product revision string.  For devices with no such string this will be
-    // zero
-    //
-
-    ULONG ProductRevisionOffset;
-
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // serial number.  For devices with no serial number this will be zero
-    //
-
-    ULONG SerialNumberOffset;
-
-    //
-    // Contains the bus type (as defined above) of the device.  It should be
-    // used to interpret the raw device properties at the end of this structure
-    // (if any)
-    //
-
-    STORAGE_BUS_TYPE BusType;
-
-    //
-    // The number of bytes of bus-specific data which have been appended to
-    // this descriptor
-    //
-
-    ULONG RawPropertiesLength;
-
-    //
-    // Place holder for the first byte of the bus specific property data
-    //
-
-    UCHAR RawDeviceProperties[1];
-
-} STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
-
-
-	//  function to decode the serial numbers of IDE hard drives
-	//  using the IOCTL_STORAGE_QUERY_PROPERTY command 
+//  function to decode the serial numbers of IDE hard drives
+//  using the IOCTL_STORAGE_QUERY_PROPERTY command 
 char * flipAndCodeBytes (char * str)
 {
 	static char flipped [1000];
@@ -512,12 +536,15 @@ char * flipAndCodeBytes (char * str)
 }
 
 
-typedef struct _MEDIA_SERAL_NUMBER_DATA {
-  ULONG  SerialNumberLength; 
-  ULONG  Result;
-  ULONG  Reserved[2];
-  UCHAR  SerialNumberData[1];
-} MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;
+// MEDIA_SERIAL_NUMBER_DATA already defined in windows.h
+// typedef struct _MEDIA_SERIAL_NUMBER_DATA {
+//   ULONG  SerialNumberLength; 
+//   ULONG  Result;
+//   ULONG  Reserved[2];
+//   UCHAR  SerialNumberData[1];
+// } MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;
+// #define _MEDIA_SERIAL_NUMBER_DATA_DEFINED
+// #endif
 
 
 int ReadPhysicalDriveInNTWithZeroRights (void)
@@ -572,7 +599,7 @@ int ReadPhysicalDriveInNTWithZeroRights (void)
 			            //  (but there can be leading spaces on IBM drives)
 				   (isalnum (serialNumber [0]) || isalnum (serialNumber [19])))
 				strcpy (HardDriveSerialNumber, serialNumber);
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 			 printf ("\n**** STORAGE_DEVICE_DESCRIPTOR for drive %d ****\n"
 				     "Vendor Id = %s\n"
 					 "Product Id = %s\n"
@@ -583,14 +610,14 @@ int ReadPhysicalDriveInNTWithZeroRights (void)
 					 & buffer [descrip -> ProductIdOffset],
 					 & buffer [descrip -> ProductRevisionOffset],
 					 serialNumber);
-#endif
+// #endif (removed)
          }
 		 else
 		 {
 			 DWORD err = GetLastError ();
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 			 printf ("\nDeviceIOControl IOCTL_STORAGE_QUERY_PROPERTY error = %d\n", err);
-#endif
+// #endif (removed)
 		 }
 
 		 memset (buffer, 0, sizeof (buffer));
@@ -612,16 +639,16 @@ int ReadPhysicalDriveInNTWithZeroRights (void)
 			            //  (but there can be leading spaces on IBM drives)
 				   (isalnum (serialNumber [0]) || isalnum (serialNumber [19])))
 				strcpy (HardDriveSerialNumber, serialNumber);
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 			 printf ("\n**** MEDIA_SERIAL_NUMBER_DATA for drive %d ****\n"
 					 "Serial Number = %s\n",
 					 drive, serialNumber);
-#endif
+// #endif (removed)
 		 }
 		 else
 		 {
 			 DWORD err = GetLastError ();
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 			 switch (err)
 			 {
 			 case 1: 
@@ -635,7 +662,7 @@ int ReadPhysicalDriveInNTWithZeroRights (void)
 			 default:
 				 printf ("\nDeviceIOControl IOCTL_STORAGE_GET_MEDIA_SERIAL_NUMBER error = %d\n\n", err);
 			 }
-#endif
+// #endif (removed)
 		 }
 
          CloseHandle (hPhysicalDriveIOCTL);
@@ -728,13 +755,13 @@ int ReadDrivePortsInWin9X (void)
 		SetPriorityClass (GetCurrentProcess (), REALTIME_PRIORITY_CLASS);
 		// SetPriorityClass (GetCurrentProcess (), HIGH_PRIORITY_CLASS);
 
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 
    if (0 == status) 
 	   // printf ("\nERROR: Could not SetThreadPriority, LastError: %d\n", GetLastError ());
 	   printf ("\nERROR: Could not SetPriorityClass, LastError: %d\n", GetLastError ());
 
-#endif
+// #endif (removed)
 
       // 1. Make an output buffer for the VxD
    rt_IdeDInfo info;
@@ -899,7 +926,7 @@ void PrintIdeInfo (int drive, DWORD diskdata [256])
        (isalnum (string1 [0]) || isalnum (string1 [19])))
       strcpy (HardDriveSerialNumber, string1);
 
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 
    switch (drive / 2)
    {
@@ -941,22 +968,18 @@ void PrintIdeInfo (int drive, DWORD diskdata [256])
 		//  calculate size based on 28 bit or 48 bit addressing
 		//  48 bit addressing is reflected by bit 10 of word 83
 	if (diskdata [83] & 0x400) 
-		sectors = diskdata [103] * 65536I64 * 65536I64 * 65536I64 + 
-					diskdata [102] * 65536I64 * 65536I64 + 
-					diskdata [101] * 65536I64 + 
+		sectors = diskdata [103] * 65536LL * 65536LL * 65536LL + 
+					diskdata [102] * 65536LL * 65536LL + 
+					diskdata [101] * 65536LL + 
 					diskdata [100];
 	else
 		sectors = diskdata [61] * 65536 + diskdata [60];
 		//  there are 512 bytes in a sector
 	bytes = sectors * 512;
+#if defined(PRINTING_TO_CONSOLE_ALLOWED)
 	printf ("Drive Size________________________: %I64d bytes\n",
 			bytes);
-
-#else   //  PRINTING_TO_CONSOLE_ALLOWED
-
-   //  nothing to do
-
-#endif  // PRINTING_TO_CONSOLE_ALLOWED
+#endif
 
 }
 
@@ -1005,24 +1028,24 @@ long getHardDriveComputerID ()
    if (version.dwPlatformId == VER_PLATFORM_WIN32_NT)
 	{
 		  //  this works under WinNT4 or Win2K if you have admin rights
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 		printf ("\nTrying to read the drive IDs using physical access with admin rights\n");
-#endif
+// #endif (removed)
 		done = ReadPhysicalDriveInNTWithAdminRights ();
 
 			//  this should work in WinNT or Win2K if previous did not work
 			//  this is kind of a backdoor via the SCSI mini port driver into
 			//     the IDE drives
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 		printf ("\nTrying to read the drive IDs using the SCSI back door\n");
-#endif
+// #endif (removed)
 		// if ( ! done) 
 			done = ReadIdeDriveAsScsiDriveInNT ();
 
 		  //  this works under WinNT4 or Win2K or WinXP if you have any rights
-#ifdef PRINTING_TO_CONSOLE_ALLOWED
+// #ifdef PRINTING_TO_CONSOLE_ALLOWED (removed)
 		printf ("\nTrying to read the drive IDs using physical access with zero rights\n");
-#endif
+// #endif (removed)
 		//if ( ! done)
 			done = ReadPhysicalDriveInNTWithZeroRights ();
 
@@ -1095,11 +1118,9 @@ long getHardDriveComputerID ()
    }
 
 #ifdef PRINTING_TO_CONSOLE_ALLOWED
-
    printf ("\nHard Drive Serial Number__________: %s\n", HardDriveSerialNumber);
    printf ("\nComputer ID_______________________: %I64d\n", id);
-
-#endif
+#endif // PRINTING_TO_CONSOLE_ALLOWED
 
    return (long) id;
 }
@@ -1111,3 +1132,4 @@ int mainxxx (int argc, char * argv [])
 
    return 0;
 }
+

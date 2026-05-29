@@ -9,11 +9,11 @@
 *	Date: 11/01/2000
 *********************************************************************/ 
 #include <stdio.h>
-#include "newcol.h"
+#include "NewCol.h"
 #include <string.h>
 #include "utildefines.h"
-#include "debuginfo.h"
-#include "TimerManObj.h"
+#include "DebugInfo.h"
+#include "timermanobj.h"
 #include "dlprnd.h"
 
 #include <stdio.h>

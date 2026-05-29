@@ -24,7 +24,7 @@
 #include <pthread.h>
 #endif
 #include "utildefines.h"
-#include "debuginfo.h"
+#include "DebugInfo.h"
 #include "cstr.h"
 
 class CNetMutex  

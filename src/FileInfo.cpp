@@ -1,5 +1,5 @@
 #include "UtilHeader.h"
-#include <TCHAR.H> 
+#include <tchar.h> 
 
 
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))

@@ -353,6 +353,7 @@ int CDLPFile::nWriteDataHeader(FILE *fp,int nMinSize)
 	}
 
 	long nCurOffSet = (nHeaderSize);
+	int i;
 	for(i=0; i<poFileArray->nGetSize(); i++)
 	{
 		CDLPFileItem *poItem = (CDLPFileItem *)poFileArray->pGetAt(i);
@@ -1213,11 +1214,12 @@ DoRecursion:
 	char basePath[ _MAX_PATH ];
 	char* basePathEndPtr = basePath;
 	char* recurseAtPtr = NULL;
+	char* pattern = patternBuf;  // C++11 scope fix: declare before for-loop
 
 	// Split the path into base path and pattern to match against.
 	bool hasWildcard = false;
 
-	for ( char* pattern = patternBuf; *pattern != '\0'; ++pattern )
+	for ( pattern = patternBuf; *pattern != '\0'; ++pattern )
 	{
 		char ch = *pattern;
 

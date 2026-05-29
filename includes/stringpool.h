@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "poolobj.h"
+#include "PoolObj.h"
 
 class CDebugInfo;
 

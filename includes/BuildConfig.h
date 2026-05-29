@@ -51,7 +51,7 @@ class VersionStamp
 
 struct VersionStampPtrLess
 {
-  bool operator()(const VersionStamp* lhs, const VersionStamp* rhs);
+  bool operator()(const VersionStamp* lhs, const VersionStamp* rhs) const;
 };
 
 

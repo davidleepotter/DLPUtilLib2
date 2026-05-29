@@ -1,0 +1,616 @@
+#ifndef WINDOWS_H
+#define WINDOWS_H
+
+// Windows API stubs for Linux/GCC builds
+// This file replaces windows.h for cross-platform compatibility
+
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <pthread.h>
+#include <unistd.h>
+
+// Basic types
+typedef uint8_t BYTE;
+typedef uint16_t WORD;
+typedef uint32_t DWORD;
+typedef int32_t LONG;
+typedef int BOOL;
+typedef void* HANDLE;
+typedef void* FARPROC;
+typedef void* HMODULE;
+typedef void* LPVOID;
+typedef const void* LPCVOID;
+typedef char* LPSTR;
+typedef const char* LPCSTR;
+typedef wchar_t WCHAR;
+typedef wchar_t* LPWSTR;
+typedef const wchar_t* LPCWSTR;
+typedef void* HWND;
+typedef char CHAR;
+typedef unsigned int UINT;
+typedef uint16_t USHORT;
+typedef uint32_t ULONG;
+typedef uint8_t UCHAR;
+typedef unsigned char BOOLEAN;
+typedef DWORD* PDWORD;
+typedef DWORD* LPDWORD;
+typedef void* LPOVERLAPPED;
+typedef void* LPSECURITY_ATTRIBUTES;
+typedef void* LPCRITICAL_SECTION;
+
+// MSVC 64-bit integer types
+typedef long long __int64;
+// uint64_t in MSVC → uint64_t in GCC (code that uses it will be updated)
+
+// uintptr_t for C++
+#include <cstdint>
+
+// WINAPI macro
+#define WINAPI
+
+// Structs (must be defined before pointer typedefs)
+typedef struct _FILETIME {
+    DWORD dwLowDateTime;
+    DWORD dwHighDateTime;
+} FILETIME, *PFILETIME, *LPFILETIME;
+
+typedef struct _SYSTEMTIME {
+    WORD wYear;
+    WORD wMonth;
+    WORD wDayOfWeek;
+    WORD wDay;
+    WORD wHour;
+    WORD wMinute;
+    WORD wSecond;
+    WORD wMilliseconds;
+} SYSTEMTIME, *PSYSTEMTIME, *LPSYSTEMTIME;
+
+typedef const SYSTEMTIME* LPCSYSTEMTIME;
+typedef const FILETIME* LPCFILETIME;
+
+typedef struct tagPOINT {
+    int x;
+    int y;
+} tagPOINT, *LPPOINT;
+
+// Constants
+#ifndef TRUE
+#define TRUE 1
+#endif
+#ifndef FALSE
+#define FALSE 0
+#endif
+#ifndef INVALID_HANDLE_VALUE
+#define INVALID_HANDLE_VALUE ((HANDLE)-1)
+#endif
+#ifndef GENERIC_READ
+#define GENERIC_READ 0x80000000
+#endif
+#ifndef GENERIC_WRITE
+#define GENERIC_WRITE 0x40000000
+#endif
+#ifndef FILE_SHARE_READ
+#define FILE_SHARE_READ 0x00000001
+#endif
+#ifndef FILE_SHARE_WRITE
+#define FILE_SHARE_WRITE 0x00000002
+#endif
+#ifndef OPEN_EXISTING
+#define OPEN_EXISTING 3
+#endif
+#ifndef FILE_ATTRIBUTE_NORMAL
+#define FILE_ATTRIBUTE_NORMAL 0x80
+#endif
+#ifndef IDOK
+#define IDOK 1
+#endif
+#ifndef MB_OK
+#define MB_OK 0x00000000L
+#endif
+#ifndef MB_ICONSTOP
+#define MB_ICONSTOP 0x00000030L
+#endif
+#ifndef VER_PLATFORM_WIN32_NT
+#define VER_PLATFORM_WIN32_NT 2
+#endif
+#ifndef IOCTL_STORAGE_BASE
+#define IOCTL_STORAGE_BASE 0x0000002dL
+#endif
+#ifndef METHOD_BUFFERED
+#define METHOD_BUFFERED 0
+#endif
+#ifndef FILE_ANY_ACCESS
+#define FILE_ANY_ACCESS 0x00000000L
+#endif
+#ifndef CTL_CODE
+#define CTL_CODE(DeviceType, Function, Method, Access) \
+    (((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method))
+#endif
+#ifndef FILE_FLAG_DELETE_ON_CLOSE
+#define FILE_FLAG_DELETE_ON_CLOSE 0x04000000
+#endif
+#ifndef REALTIME_PRIORITY_CLASS
+#define REALTIME_PRIORITY_CLASS 0x00000100
+#endif
+#ifndef NORMAL_PRIORITY_CLASS
+#define NORMAL_PRIORITY_CLASS 0x00000020
+#endif
+
+// ULARGE_INTEGER
+typedef struct _ULARGE_INTEGER {
+    union {
+        struct {
+            DWORD LowPart;
+            DWORD HighPart;
+        };
+        uint64_t QuadPart;
+    };
+} ULARGE_INTEGER, *PULARGE_INTEGER;
+
+typedef struct _LARGE_INTEGER {
+    union {
+        struct {
+            DWORD LowPart;
+            LONG HighPart;
+        };
+        int64_t QuadPart;
+    };
+} LARGE_INTEGER, *PLARGE_INTEGER;
+
+typedef struct _WIN32_FIND_DATAA {
+    DWORD dwFileAttributes;
+    FILETIME ftCreationTime;
+    FILETIME ftLastAccessTime;
+    FILETIME ftLastWriteTime;
+    DWORD nFileSizeHigh;
+    DWORD nFileSizeLow;
+    DWORD dwReserved0;
+    DWORD dwReserved1;
+    CHAR cFileName[260];
+    CHAR cAlternateFileName[14];
+} WIN32_FIND_DATAA, *PWIN32_FIND_DATAA, *LPWIN32_FIND_DATAA;
+
+// Function pointer types
+typedef BOOL (WINAPI *PGETDISKFREESPACEEXA)(LPCSTR, PULARGE_INTEGER, PULARGE_INTEGER, PULARGE_INTEGER);
+
+// Inline stub implementations
+inline void GetSystemTime(LPSYSTEMTIME lpSystemTime) {
+    time_t rawtime;
+    struct tm* timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    lpSystemTime->wYear = timeinfo->tm_year + 1900;
+    lpSystemTime->wMonth = timeinfo->tm_mon + 1;
+    lpSystemTime->wDayOfWeek = timeinfo->tm_wday;
+    lpSystemTime->wDay = timeinfo->tm_mday;
+    lpSystemTime->wHour = timeinfo->tm_hour;
+    lpSystemTime->wMinute = timeinfo->tm_min;
+    lpSystemTime->wSecond = timeinfo->tm_sec;
+    lpSystemTime->wMilliseconds = 0;
+}
+
+inline void GetSystemTimeAsFileTime(LPFILETIME lpSystemTimeAsFileTime) {
+    time_t rawtime;
+    time(&rawtime);
+    struct tm* timeinfo = localtime(&rawtime);
+    
+    int years = timeinfo->tm_year + 1900 - 1601;
+    int days = years * 365 + years / 4 - years / 100 + years / 400;
+    days += (timeinfo->tm_mon * 306) / 10 + timeinfo->tm_mday;
+    
+    int64_t fileTime = (int64_t)(days * 86400 + timeinfo->tm_hour * 3600 + 
+                                   timeinfo->tm_min * 60 + timeinfo->tm_sec) * 10000000;
+    
+    lpSystemTimeAsFileTime->dwLowDateTime = (DWORD)(fileTime & 0xFFFFFFFF);
+    lpSystemTimeAsFileTime->dwHighDateTime = (DWORD)(fileTime >> 32);
+}
+
+inline void SystemTimeToFileTime(LPCSYSTEMTIME lpSystemTime, LPFILETIME lpFileTime) {
+    // Simplified conversion
+    time_t rawtime;
+    struct tm* timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    
+    int years = timeinfo->tm_year + 1900 - 1601;
+    int days = years * 365 + years / 4 - years / 100 + years / 400;
+    days += (timeinfo->tm_mon * 306) / 10 + timeinfo->tm_mday;
+    
+    int64_t fileTime = (int64_t)(days * 86400 + timeinfo->tm_hour * 3600 + 
+                                   timeinfo->tm_min * 60 + timeinfo->tm_sec) * 10000000;
+    
+    lpFileTime->dwLowDateTime = (DWORD)(fileTime & 0xFFFFFFFF);
+    lpFileTime->dwHighDateTime = (DWORD)(fileTime >> 32);
+}
+
+inline void FileTimeToSystemTime(LPCFILETIME lpFileTime, LPSYSTEMTIME lpSystemTime) {
+    int64_t fileTime = ((int64_t)lpFileTime->dwHighDateTime << 32) | lpFileTime->dwLowDateTime;
+    time_t seconds = fileTime / 10000000;
+    
+    struct tm* timeinfo = localtime(&seconds);
+    lpSystemTime->wYear = timeinfo->tm_year + 1900;
+    lpSystemTime->wMonth = timeinfo->tm_mon + 1;
+    lpSystemTime->wDayOfWeek = timeinfo->tm_wday;
+    lpSystemTime->wDay = timeinfo->tm_mday;
+    lpSystemTime->wHour = timeinfo->tm_hour;
+    lpSystemTime->wMinute = timeinfo->tm_min;
+    lpSystemTime->wSecond = timeinfo->tm_sec;
+    lpSystemTime->wMilliseconds = 0;
+}
+
+inline HANDLE FindFirstFile(LPCSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData) {
+    return INVALID_HANDLE_VALUE;
+}
+
+inline BOOL FindNextFile(HANDLE hFindFile, LPWIN32_FIND_DATAA lpFindFileData) {
+    return FALSE;
+}
+
+inline BOOL FindClose(HANDLE hFindFile) {
+    return TRUE;
+}
+
+inline HMODULE GetModuleHandle(LPCSTR lpModuleName) {
+    return NULL;
+}
+
+inline FARPROC GetProcAddress(HMODULE hModule, LPCSTR lpProcName) {
+    return NULL;
+}
+
+inline int MessageBox(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType) {
+    fprintf(stderr, "MessageBox: %s\n", lpText ? lpText : "");
+    return IDOK;
+}
+
+// io.h stubs
+#include <fcntl.h>
+#include <sys/types.h>
+#define _O_RDONLY O_RDONLY
+#define _O_WRONLY O_WRONLY
+#define _O_CREAT O_CREAT
+#define _O_TRUNC O_TRUNC
+#define _S_IWRITE S_IWUSR
+#define _S_IREAD S_IRUSR
+inline int _open(const char* pathname, int flags, int mode) {
+    return open(pathname, flags, mode);
+}
+inline int _close(int fd) {
+    return close(fd);
+}
+inline ssize_t _read(int fd, void* buf, size_t count) {
+    return read(fd, buf, count);
+}
+inline ssize_t _write(int fd, const void* buf, size_t count) {
+    return write(fd, buf, count);
+}
+inline off_t _lseek(int fd, off_t offset, int whence) {
+    return lseek(fd, offset, whence);
+}
+
+// Additional Windows structures
+typedef struct _OSVERSIONINFOA {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    CHAR szCSDVersion[128];
+} OSVERSIONINFOA, *POSVERSIONINFOA, *LPOSVERSIONINFOA;
+
+// ANSI/Unicode alias
+typedef OSVERSIONINFOA OSVERSIONINFO;
+typedef OSVERSIONINFOA* POSVERSIONINFO;
+typedef OSVERSIONINFOA* LPOSVERSIONINFO;
+
+// GetVersionEx stub
+inline BOOL GetVersionEx(LPOSVERSIONINFOA lpVersionInfo) {
+    lpVersionInfo->dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+    lpVersionInfo->dwMajorVersion = 10;
+    lpVersionInfo->dwMinorVersion = 0;
+    lpVersionInfo->dwBuildNumber = 19041;
+    lpVersionInfo->dwPlatformId = 2; // VER_PLATFORM_WIN32_NT
+    lpVersionInfo->szCSDVersion[0] = '\0';
+    return TRUE;
+}
+
+typedef struct _STORAGE_DEVICE_DESCRIPTOR {
+    ULONG Size;
+    UCHAR DeviceType;
+    UCHAR DeviceTypeModifier;
+    BOOLEAN RemovableMedia;
+    BOOLEAN CommandQueueing;
+    ULONG VendorIdOffset;
+    ULONG ProductIdOffset;
+    ULONG ProductRevisionOffset;
+    ULONG SerialNumberOffset;
+    ULONG BusType;
+    ULONG RawPropertiesLength;
+    UCHAR RawDeviceProperties[1];
+} STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
+#define _STORAGE_DEVICE_DESCRIPTOR_DEFINED
+
+typedef struct _MEDIA_SERIAL_NUMBER_DATA {
+    ULONG SerialNumberLength;
+    CHAR SerialNumberData[1];
+} MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;
+
+typedef struct _SRB_IO_CONTROL {
+    ULONG HeaderLength;
+    UCHAR Signature[8];
+    ULONG Timeout;
+    ULONG ControlCode;
+    ULONG ReturnCode;
+    ULONG Length;
+    ULONG StartingSector;
+    union {
+        ULONG ClusterCount;
+        ULONG Reserved;
+    };
+    UCHAR DataBuffer[1];
+} SRB_IO_CONTROL, *PSRB_IO_CONTROL;
+#define _SRB_IO_CONTROL_DEFINED
+
+// rdtsc (Read Time-Stamp Counter) stub
+static inline uint64_t rdtsc_stub() {
+#if defined(__x86_64__) || defined(__i386__)
+    unsigned int lo, hi;
+    __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi));
+    return ((uint64_t)hi << 32) | lo;
+#else
+    // Fallback: return a monotonic counter for non-x86
+    static uint64_t counter = 0;
+    counter += 1000000000ULL; // ~1 GHz
+    return counter;
+#endif
+}
+
+// MAX_PATH and _MAX_PATH
+#ifndef MAX_PATH
+#define MAX_PATH 260
+#endif
+#ifndef _MAX_PATH
+#define _MAX_PATH 260
+#endif
+
+// stricmp stub
+inline int stricmp(const char* s1, const char* s2) {
+    return strcasecmp(s1, s2);
+}
+#define CP_ACP 0
+inline int WideCharToMultiByte(int CodePage, DWORD dwFlags, const wchar_t* lpWideCharStr, int cchWideChar, char* lpMultiByteStr, int cbMultiByte, const char* lpDefaultChar, BOOL* lpUsedDefaultChar) {
+    if (!lpWideCharStr || !lpMultiByteStr) return 0;
+    int i = 0;
+    while (lpWideCharStr[i] && i < cchWideChar) {
+        if (lpWideCharStr[i] < 128) {
+            lpMultiByteStr[i] = (char)lpWideCharStr[i];
+        } else {
+            lpMultiByteStr[i] = '?';
+        }
+        i++;
+    }
+    lpMultiByteStr[i] = '\0';
+    return i;
+}
+
+inline int MultiByteToWideChar(int CodePage, DWORD dwFlags, const char* lpMultiByteStr, int cbMultiByte, wchar_t* lpWideCharStr, int cchWideChar) {
+    if (!lpMultiByteStr || !lpWideCharStr) return 0;
+    int i = 0;
+    while (lpMultiByteStr[i] && i < cbMultiByte && i < cchWideChar) {
+        lpWideCharStr[i] = (wchar_t)lpMultiByteStr[i];
+        i++;
+    }
+    lpWideCharStr[i] = 0;
+    return i;
+}
+
+// String utilities
+typedef const char* LPCTSTR;
+inline const char* _tcsstr(const char* s1, const char* s2) {
+    return strstr(s1, s2);
+}
+inline int _tcslen(const char* s) {
+    return strlen(s);
+}
+inline int _tcsncmp(const char* s1, const char* s2, size_t n) {
+    return strncmp(s1, s2, n);
+}
+inline char* _tcscpy(char* dest, const char* src) {
+    return strcpy(dest, src);
+}
+inline char _tccpy(char* dest, const char* src) {
+    return *dest = *src;
+}
+inline int _tclen(const char* s) {
+    return strlen(s);
+}
+#define _T(x) x
+#define _TEXT(x) x
+
+// min/max macros
+#define DLP_min(a, b) (((a) < (b)) ? (a) : (b))
+#define DLP_max(a, b) (((a) > (b)) ? (a) : (b))
+
+// Memory functions
+inline void ZeroMemory(void* ptr, size_t len) {
+    memset(ptr, 0, len);
+}
+
+// Process functions
+inline HANDLE GetCurrentProcess() {
+    return (HANDLE)-1;
+}
+inline BOOL SetPriorityClass(HANDLE hProcess, DWORD dwPriorityClass) {
+    return TRUE;
+}
+inline DWORD GetLastError() {
+    return 0;
+}
+
+// DeviceIoControl stub
+inline BOOL DeviceIoControl(HANDLE hDevice, DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize, LPDWORD lpBytesReturned, LPOVERLAPPED lpOverlapped) {
+    if (lpBytesReturned) *lpBytesReturned = 0;
+    return FALSE;
+}
+
+// CreateFile stub
+inline HANDLE CreateFile(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile) {
+    return INVALID_HANDLE_VALUE;
+}
+
+// CloseHandle stub
+inline BOOL CloseHandle(HANDLE hObject) {
+    return TRUE;
+}
+
+// GetTickCount stub
+inline DWORD GetTickCount() {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (DWORD)(ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
+}
+
+
+// Helper: convert HANDLE (void*) to int fd for stub implementations
+static inline int fd_from_handle(HANDLE h) {
+    return (int)(intptr_t)h;
+}
+
+// GetCurrentProcessId stub
+inline DWORD GetCurrentProcessId() {
+    return (DWORD)getpid();
+}
+
+// GetCurrentThreadId stub
+inline DWORD GetCurrentThreadId() {
+    return (DWORD)pthread_self();
+}
+
+// === FileInfo.cpp needed stubs ===
+
+// File flags
+#ifndef FILE_FLAG_SEQUENTIAL_SCAN
+#define FILE_FLAG_SEQUENTIAL_SCAN 0x08000000
+#endif
+
+#ifndef FILE_BEGIN
+#define FILE_BEGIN 0
+#endif
+#ifndef FILE_CURRENT
+#define FILE_CURRENT 1
+#endif
+#ifndef FILE_END
+#define FILE_END 2
+#endif
+
+// PLONG typedef
+#ifndef _PLONG_DEFINED
+typedef long* PLONG;
+#define _PLONG_DEFINED
+#endif
+
+// SetFilePointer stub - maps to lseek
+inline DWORD SetFilePointer(HANDLE hFile, LONG lDistance, PLONG plDistanceHigh, DWORD dwMoveMethod) {
+    int whence = SEEK_SET;
+    if (dwMoveMethod == FILE_BEGIN) whence = SEEK_SET;
+    else if (dwMoveMethod == FILE_CURRENT) whence = SEEK_CUR;
+    else if (dwMoveMethod == FILE_END) whence = SEEK_END;
+    long result = lseek(fd_from_handle(hFile), lDistance, whence);
+    if (plDistanceHigh) *plDistanceHigh = (LONG)(result >> 32);
+    return (DWORD)result;
+}
+
+// ReadFile stub
+inline BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpBytesRead, LPOVERLAPPED lpOverlapped) {
+    ssize_t ret = read(fd_from_handle(hFile), lpBuffer, nNumberOfBytesToRead);
+    if (lpBytesRead) *lpBytesRead = (DWORD)(ret > 0 ? ret : 0);
+    return ret > 0 ? TRUE : FALSE;
+}
+
+// InterlockedExchange stub - accepts both LONG* and long*
+inline LONG InterlockedExchange(LONG* Target, LONG Value) {
+    return __sync_lock_test_and_set(Target, Value);
+}
+inline long InterlockedExchange(long* Target, long Value) {
+    return __sync_lock_test_and_set(Target, Value);
+}
+
+// InterlockedIncrement stub - accepts both LONG* and long*
+inline LONG InterlockedIncrement(LONG* Addend) {
+    return __sync_fetch_and_add(Addend, 1) + 1;
+}
+inline long InterlockedIncrement(long* Addend) {
+    return __sync_fetch_and_add(Addend, 1) + 1;
+}
+
+// MSVC path component constants
+#ifndef _MAX_DRIVE
+#define _MAX_DRIVE   16
+#endif
+#ifndef _MAX_DIR
+#define _MAX_DIR     256
+#endif
+#ifndef _MAX_FNAME
+#define _MAX_FNAME   256
+#endif
+#ifndef _MAX_EXT
+#define _MAX_EXT     256
+#endif
+
+// _tsplitpath stub - splits a path into drive, directory, filename, extension
+inline void _tsplitpath(const char* path, char* drive, char* dir, char* fname, char* ext) {
+    // Skip drive (e.g., "C:")
+    const char* p = path;
+    if (p[0] && p[1] == ':') p += 2;
+    // Skip directory
+    while (*p && *p != '/') p++;
+    // fname starts here
+    const char* fname_start = p;
+    while (*p && *p != '.') p++;
+    // ext starts here
+    const char* ext_start = p;
+    // fname ends at ext or null
+    if (*p == '.') p++;
+    while (*p && *p != '.' && *p != '/') p++;
+
+    if (drive) {
+        const char* d = path;
+        int i = 0;
+        while (d < p && i < _MAX_DRIVE - 1) drive[i++] = *d++;
+        drive[i] = '\0';
+    }
+    if (dir) {
+        const char* d = path;
+        if (d[0] && d[1] == ':') d += 2;
+        int i = 0;
+        while (d < fname_start && i < _MAX_DIR - 1) {
+            if (*d == '\\') dir[i++] = '/';
+            else dir[i++] = *d;
+            d++;
+        }
+        if (i > 0 && dir[i-1] != '/') dir[i++] = '/';
+        dir[i] = '\0';
+    }
+    if (fname) {
+        int i = 0;
+        while (fname_start < ext_start && i < _MAX_FNAME - 1) fname[i++] = *fname_start++;
+        fname[i] = '\0';
+    }
+    if (ext) {
+        if (*ext_start == '.') {
+            int i = 0;
+            const char* e = ext_start + 1;
+            while (*e && *e != '.' && *e != '/' && i < _MAX_EXT - 1) ext[i++] = *e++;
+            ext[i] = '\0';
+        } else {
+            ext[0] = '\0';
+        }
+    }
+}
+
+#endif // WINDOWS_H

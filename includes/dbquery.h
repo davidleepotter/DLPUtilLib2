@@ -21,6 +21,28 @@ class DLP_CListAccess;
 class CDbase;
 class CDBMySql;
 class CDBOdbc;
+
+// CQuery stub - query data container (from netLib)
+class CQuery {
+public:
+    int nType;
+    char data_type;
+    CStr *poString;
+    int nData;
+    float fData;
+    unsigned long ulData;
+    
+    CQuery(char arg, char *data) : nType(0), data_type(arg) { poString = new CStr(data); nData = 0; fData = 0; ulData = 0; }
+    CQuery(char arg, int data) : nType(0), data_type(arg) { poString = nullptr; nData = data; fData = 0; ulData = 0; }
+    CQuery(char arg, float data) : nType(0), data_type(arg) { poString = nullptr; nData = 0; fData = data; ulData = 0; }
+    CQuery(char arg, unsigned long data) : nType(0), data_type(arg) { poString = nullptr; nData = 0; fData = 0; ulData = data; }
+    CQuery(char arg, int dt, char *data) : nType(0), data_type(arg) { poString = new CStr(data); nData = 0; fData = 0; ulData = 0; }
+    CQuery(char arg, int dt, int data) : nType(0), data_type(arg) { poString = nullptr; nData = data; fData = 0; ulData = 0; }
+    CQuery(char arg, int dt, float data) : nType(0), data_type(arg) { poString = nullptr; nData = 0; fData = data; ulData = 0; }
+    CQuery(char arg, int dt, unsigned long data) : nType(0), data_type(arg) { poString = nullptr; nData = 0; fData = 0; ulData = data; }
+    ~CQuery() { delete poString; }
+};
+
 class CDBQuery  
 {
 

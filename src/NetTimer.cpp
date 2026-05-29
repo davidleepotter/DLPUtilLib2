@@ -11,7 +11,7 @@
 
 #include "utildefines.h"
 #include "nettimer.h"
-#include "debuginfo.h"
+#include "DebugInfo.h"
 
 #ifdef WIN32
 	#include <windows.h>

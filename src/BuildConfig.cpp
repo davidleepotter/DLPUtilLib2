@@ -23,7 +23,7 @@
 #include <memory>
 #include <string.h>
 #include <assert.h>
-#include "CStr.h"
+#include "cstr.h"
 
 FILE_VERSION("$Revision: 1 $", BuildConfig_cpp);
 
@@ -90,7 +90,7 @@ bool VersionStamp::operator<(const VersionStamp& rhs) const
 
 
 bool VersionStampPtrLess::operator ()(const VersionStamp* lhs,
-                                      const VersionStamp* rhs)
+                                       const VersionStamp* rhs) const
 {
   return (*lhs) < (*rhs);
 }

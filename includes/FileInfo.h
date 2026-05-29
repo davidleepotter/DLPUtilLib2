@@ -7,7 +7,47 @@ class CDebugInfo;
 class CDLPFileInfo;
 class CDLPFileManager;
 
+
+#ifndef WIN32
+typedef long long __int64;
+#endif
+
 typedef __int64 t64;
+
+// Additional Windows types needed for Linux
+typedef uint64_t ULONGLONG;
+typedef uint64_t ULONGLONG;
+#if defined(__LP64__) || defined(_LP64)
+typedef long LPARAM;
+#else
+typedef int LPARAM;
+#endif
+#if defined(__LP64__) || defined(_LP64)
+typedef long WPARAM;
+#else
+typedef int WPARAM;
+#endif
+typedef void* LRESULT;
+
+// Allow enum to LPARAM conversion
+#define LPARAM_FROM_ENUM(e) ((LPARAM)(void*)(long)(e))
+enum CFileInfoArraySort {
+    AP_NOSORT = 0,
+    AP_SORTBYNAME = 1,
+    AP_SORTBYTYPE = 2,
+    AP_SORTBYDATE = 3,
+    AP_SORTBYSIZE = 4
+};
+// NTSTATUS typedef - use DWORD consistently (Windows-compatible)
+#ifndef _DLP_NTSTATUS_DEFINED
+typedef DWORD NTSTATUS;
+#define _DLP_NTSTATUS_DEFINED
+#endif
+
+// WIN32_FIND_DATAA is already in windows.h, add alias
+#ifndef WIN32
+typedef WIN32_FIND_DATAA WIN32_FIND_DATA;
+#endif
 
 
 ////////////////////////////////////////////////
@@ -26,12 +66,12 @@ public:
 	void vSetTime(const FILETIME *poTime);
 	CStr * poGetDate(void);
 
-	void CDLP_TIME::T64ToFileTime(t64 *pt,FILETIME *pft);
-	void CDLP_TIME::FileTimeToT64(FILETIME *pft,t64 *pt);
+	void T64ToFileTime(t64 *pt,FILETIME *pft);
+	void FileTimeToT64(FILETIME *pft,t64 *pt);
 	t64 FindTimeTBase(void);
-	void CDLP_TIME::SystemTimeToT64(SYSTEMTIME *pst,t64 *pt);
-	void CDLP_TIME::T64ToSystemTime(t64 *pt,SYSTEMTIME *pst);
-	t64 CDLP_TIME::time_64(t64 *pt);
+	void SystemTimeToT64(SYSTEMTIME *pst,t64 *pt);
+	void T64ToSystemTime(t64 *pt,SYSTEMTIME *pst);
+	t64 time_64(t64 *pt);
 };
 
 
@@ -39,6 +79,47 @@ public:
 /**
  * @class Stores information about a file in a way like <c CFindFile> does
  */
+// FILE_ATTRIBUTE constants
+#ifndef FILE_ATTRIBUTE_NORMAL
+#define FILE_ATTRIBUTE_NORMAL 0x80
+#endif
+#ifndef FILE_ATTRIBUTE_DIRECTORY
+#define FILE_ATTRIBUTE_DIRECTORY 0x10
+#endif
+#ifndef FILE_ATTRIBUTE_ARCHIVE
+#define FILE_ATTRIBUTE_ARCHIVE 0x20
+#endif
+#ifndef FILE_ATTRIBUTE_READONLY
+#define FILE_ATTRIBUTE_READONLY 0x01
+#endif
+#ifndef FILE_ATTRIBUTE_HIDDEN
+#define FILE_ATTRIBUTE_HIDDEN 0x02
+#endif
+#ifndef FILE_ATTRIBUTE_SYSTEM
+#define FILE_ATTRIBUTE_SYSTEM 0x04
+#endif
+#ifndef FILE_ATTRIBUTE_TEMPORARY
+#define FILE_ATTRIBUTE_TEMPORARY 0x100
+#endif
+#ifndef FILE_ATTRIBUTE_SPARSE_FILE
+#define FILE_ATTRIBUTE_SPARSE_FILE 0x00000200
+#endif
+#ifndef FILE_ATTRIBUTE_REPARSE_POINT
+#define FILE_ATTRIBUTE_REPARSE_POINT 0x00000400
+#endif
+#ifndef FILE_ATTRIBUTE_COMPRESSED
+#define FILE_ATTRIBUTE_COMPRESSED 0x00000800
+#endif
+#ifndef FILE_ATTRIBUTE_OFFLINE
+#define FILE_ATTRIBUTE_OFFLINE 0x00001000
+#endif
+#ifndef FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
+#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED 0x00002000
+#endif
+#ifndef FILE_ATTRIBUTE_ENCRYPTED
+#define FILE_ATTRIBUTE_ENCRYPTED 0x00004000
+#endif
+
 class CFileInfo 
 {  
 private:
@@ -73,14 +154,14 @@ public:
     * @parm Path of the file the CFileInfo refers to.
     * @parmopt User defined parameter.
     */
-   void Create(const WIN32_FIND_DATA* pwfd, const char *strPath, LPARAM lParam=NULL);
+   void Create(const WIN32_FIND_DATA* pwfd, const char *strPath, LPARAM lParam=0);
 
    /**
     * @cmember Initializes CFileInfo member variables.
     * @parm Absolute path for file or directory
     * @parmopt User defined parameter.
     */
-   void Create(const char *strFilePath, LPARAM lParam = NULL);
+   void Create(const char *strFilePath, LPARAM lParam = 0);
    
    /**
     * @cmember Calcs 32bit checksum of file (i.e. sum of all the DWORDS of the file, 
@@ -196,6 +277,47 @@ private:
 /**
  * @class Allows to retrieve <c CFileInfo>s from files/directories in a directory
  */
+// FILE_ATTRIBUTE constants
+#ifndef FILE_ATTRIBUTE_NORMAL
+#define FILE_ATTRIBUTE_NORMAL 0x80
+#endif
+#ifndef FILE_ATTRIBUTE_DIRECTORY
+#define FILE_ATTRIBUTE_DIRECTORY 0x10
+#endif
+#ifndef FILE_ATTRIBUTE_ARCHIVE
+#define FILE_ATTRIBUTE_ARCHIVE 0x20
+#endif
+#ifndef FILE_ATTRIBUTE_READONLY
+#define FILE_ATTRIBUTE_READONLY 0x01
+#endif
+#ifndef FILE_ATTRIBUTE_HIDDEN
+#define FILE_ATTRIBUTE_HIDDEN 0x02
+#endif
+#ifndef FILE_ATTRIBUTE_SYSTEM
+#define FILE_ATTRIBUTE_SYSTEM 0x04
+#endif
+#ifndef FILE_ATTRIBUTE_TEMPORARY
+#define FILE_ATTRIBUTE_TEMPORARY 0x100
+#endif
+#ifndef FILE_ATTRIBUTE_SPARSE_FILE
+#define FILE_ATTRIBUTE_SPARSE_FILE 0x00000200
+#endif
+#ifndef FILE_ATTRIBUTE_REPARSE_POINT
+#define FILE_ATTRIBUTE_REPARSE_POINT 0x00000400
+#endif
+#ifndef FILE_ATTRIBUTE_COMPRESSED
+#define FILE_ATTRIBUTE_COMPRESSED 0x00000800
+#endif
+#ifndef FILE_ATTRIBUTE_OFFLINE
+#define FILE_ATTRIBUTE_OFFLINE 0x00001000
+#endif
+#ifndef FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
+#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED 0x00002000
+#endif
+#ifndef FILE_ATTRIBUTE_ENCRYPTED
+#define FILE_ATTRIBUTE_ENCRYPTED 0x00004000
+#endif
+
 class CFileInfoArray 
 {
 private:
@@ -241,7 +363,7 @@ public:
     * @xref <mf CFileInfoArray.AddFile> <mf CFileInfoArray.AddFileInfo> <md CFileInfoArray.AP_NOSORT>
     */
    int AddDir(const char * strDirName, const char * strMask, const BOOL bRecurse, 
-      LPARAM lAddParam=AP_NOSORT, const BOOL bIncludeDirs=FALSE, 
+      LPARAM lAddParam=(LPARAM)(void*)(long)AP_NOSORT, const BOOL bIncludeDirs=FALSE, 
       const volatile BOOL* pbAbort = NULL, volatile ULONG* pulCount = NULL);
 
    /**

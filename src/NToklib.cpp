@@ -12,9 +12,9 @@
 #include "ntoklib.h"
 #include "cstr.h"
 #include <stdio.h>
-#include "newcol.h"
+#include "NewCol.h"
 #include "utildefines.h"
-#include "debuginfo.h"
+#include "DebugInfo.h"
 #include "aracrypt.h"
 
 long CNTok::nGUID = 0;

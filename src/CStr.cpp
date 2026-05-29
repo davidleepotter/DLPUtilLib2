@@ -10,16 +10,9 @@
 *********************************************************************/ 
 
 #include <stdio.h>
+#define TEXT(x) x
 
 #ifndef WIN32
-
-	#define UINT unsigned int
-	#define BOOL bool
-	#define LPCTSTR const char *
-	#define LPCSTR char *
-	#define TRUE true
-	#define FALSE false
-	#define BYTE char
 	#include <memory.h>
 	#include <ctype.h>
 	#include <sys/io.h>
@@ -34,12 +27,12 @@
 
 #include <time.h>
 #include "cstr.h"
-#include "newcol.h"
+#include "NewCol.h"
 #include "netmutex.h"
 #include "utildefines.h"
 #include "dlprnd.h"
 #include "timermanobj.h"
-#include "fileinfo.h"
+#include "FileInfo.h"
 
 
 unsigned int CStr::nGlobalCnt = 0;
@@ -657,6 +650,22 @@ void CStr::GetMiddle(CPOS start, CPOS chars, CStr *result)
     
     // Copy bytes
     result->CoreAddChars(GetString()+start, chars);
+}
+
+
+CStr CStr::Mid(CPOS start, CPOS length) const
+{
+    CStr result;
+    result.Empty();
+    CPOS l = GetLength();
+    if (l == 0 || ((start) + length) == 0)
+        return result;
+    if (start >= l)
+        return result;
+    if ((start + length) > l)
+        length = CPOS(l - start);
+    result.CoreAddChars(GetString()+start, length);
+    return result;
 }
 
 
@@ -2383,7 +2392,7 @@ int CStr::nCompareFiles(char *file1, char *file2)
 	HANDLE myHandle1;
 	WIN32_FIND_DATA myFileData1;
 	SYSTEMTIME filetime1;
-	myHandle1 = FindFirstFile( LPCTSTR(file1), &myFileData1 );
+	myHandle1 = FindFirstFile( (LPCTSTR)file1, &myFileData1 );
 	FileTimeToSystemTime(((FILETIME *)&myFileData1.ftLastWriteTime ), &filetime1);
 	oVersion1.Format(TEXT("%d/%d/%d/%d/%d/%d/%d")
 		,filetime1.wMonth
@@ -2398,7 +2407,7 @@ int CStr::nCompareFiles(char *file1, char *file2)
 	HANDLE myHandle2;
 	WIN32_FIND_DATA myFileData2;
 	SYSTEMTIME filetime2;
-	myHandle2 = FindFirstFile( LPCTSTR(file2), &myFileData2);
+	myHandle2 = FindFirstFile( (LPCTSTR)file2, &myFileData2);
 	FileTimeToSystemTime(((FILETIME *)&myFileData2.ftLastWriteTime ), &filetime2);
 	oVersion2.Format(TEXT("%d/%d/%d/%d/%d/%d/%d")
 		,filetime2.wMonth

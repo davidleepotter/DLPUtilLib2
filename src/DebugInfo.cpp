@@ -9,10 +9,10 @@
 *	Date: 8/01/2001
 *********************************************************************/ 
 
-#include "debuginfo.h"
+#include "DebugInfo.h"
 #include "utildefines.h"
 #include "cstr.h"
-#include "newcol.h"
+#include "NewCol.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

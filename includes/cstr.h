@@ -25,9 +25,9 @@ class DLP_CPtrArray;
 	#include <unistd.h>
 	#include <stdlib.h>
 	#include <stdarg.h>
+	#include "windows.h"
 	#define UINT unsigned int
 	#define BOOL bool
-	#define LPCTSTR const char *
 	#define BYTE char
 #endif
 
@@ -167,6 +167,8 @@ public:
 	void GetRight (CPOS chars, CStr *result);
 	void GetMiddleStartEnd(CPOS start, CPOS end, CStr *result);
 	void GetMiddle (CPOS start, CPOS chars, CStr *result);
+	CStr Mid(CPOS start, CPOS length) const;
+	CStr Mid(CPOS start) const { return Mid(start, GetLength() - start); }
 	int  Find (char ch, CPOS startat = 0) const;
 	int  Find(char *lpszSub, int nStart) const;
 	int  ReverseFind (char ch, CPOS startat = (CPOS) -1) const;
@@ -228,6 +230,8 @@ public:
 	char *poGetDateTime(FILETIME *poTime);
 	char *poGetDateTime(void);
 	char *poGetDateTimeByTick(long nTick);
+	char * GetBuffer(CPOS nMinBufLength);
+	void ReleaseBuffer(CPOS nNewLength = -1);
 	void vHexToDec(void);
 	void vDecToHex(void);
 	void vGetDiskSpace(char *drive);
