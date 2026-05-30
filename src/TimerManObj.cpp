@@ -383,9 +383,9 @@ return nVal;
 		//vSetMutex();
 
 			nAbsolute = 1;
-   			timeb o_time;
-			ftime(&o_time);
-			uVal = (o_time.time *1000)+o_time.millitm;
+   			struct timeval tv;
+			gettimeofday(&tv, NULL);
+			uVal = (tv.tv_sec *1000)+(tv.tv_usec / 1000);
 		//vClearMutex();
 	}
 
@@ -397,9 +397,9 @@ return nVal;
 	//////////////////////////////////////////////////////
 	unsigned int CTimerManObj::nGetCurrent(void) 
 	{
-   			timeb o_time;
-			ftime(&o_time);
-			return (o_time.time *1000)+o_time.millitm;
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return (tv.tv_sec *1000)+(tv.tv_usec / 1000);
 	}
 
 #endif

@@ -130,7 +130,7 @@ protected:
 	int x_GetFreePos();
 	int x_ReleasePos();
 	int x_ParseElem( int iPos );
-	int x_ParseError( char * szError, char * szName = NULL );
+	int x_ParseError( const char * szError, const char * szName = NULL );
 	static bool x_FindChar( char * szDoc, int& nChar, char c );
 	static bool x_FindAny( char * szDoc, int& nChar );
 	static bool x_FindToken( TokenPos& token );

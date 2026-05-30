@@ -229,7 +229,7 @@ int CMarkup::x_ReleasePos()
 	return 0;
 }
 
-int CMarkup::x_ParseError( char * szError, char * szName )
+int CMarkup::x_ParseError( const char * szError, const char * szName )
 {
 	if ( szName )
 	{
@@ -531,7 +531,7 @@ int CMarkup::x_ParseNode( CMarkup::TokenPos& token )
 		if ( ! szDoc[token.nL+1] || ! szDoc[token.nL+2] )
 			return 0;
 		char cFirstChar = szDoc[token.nL+1];
-		char * szEndOfNode = NULL;
+		const char * szEndOfNode = NULL;
 		if ( cFirstChar == '?' )
 		{
 			nTypeFound = MNT_PROCESSING_INSTRUCTION;
@@ -767,7 +767,7 @@ CStr * CMarkup::x_TextToDoc( char * szText, bool bAttrib ) const
 	// &apos; apostrophe or single quote
 	// &quot; double quote
 	//
-	static char* szaReplace[] = { "&lt;","&amp;","&gt;","&apos;","&quot;" };
+	static const char* szaReplace[] = { "&lt;","&amp;","&gt;","&apos;","&quot;" };
 	const char* pFind = bAttrib?"<&>\'\"":"<&>";
 	CStr csText;
 	const char* pSource = szText;
@@ -776,7 +776,7 @@ CStr * CMarkup::x_TextToDoc( char * szText, bool bAttrib ) const
 	char* pDest = csText.GetBuffer(nDestSize);
 	int nLen = 0;
 	char cSource = *pSource;
-	char* pFound;
+	const char* pFound;
 	while ( cSource )
 	{
 		if ( nLen > nDestSize - 6 )
@@ -809,9 +809,9 @@ CStr * CMarkup::x_TextFromDoc( int nLeft, int nRight ) const
 	// ampersand escape codes replaced with special characters e.g. convert "6&gt;7" to "6>7"
 	// Conveniently the result is always the same or shorter in byte length
 	//
-	static char* szaCode[] = { _T("lt;"),"amp;","gt;","apos;","quot;" };
+	static const char* szaCode[] = { _T("lt;"),"amp;","gt;","apos;","quot;" };
 	static int anCodeLen[] = { 3,4,3,5,5 };
-	static char* szSymbol = "<&>\'\"";
+	static const char* szSymbol = "<>&'\\";
 	CStr csText;
 	const char* pSource = m_csDoc->GetString();
 	int nDestSize = nRight - nLeft + 1;

@@ -75,9 +75,9 @@ unsigned long CNetTimer::uGetGlobTickCount()
 	#endif
 
 	#ifndef WIN32
-		timeb o_time;
-		ftime(&o_time);
-		return (o_time.time *1000)+o_time.millitm;
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return (tv.tv_sec *1000)+(tv.tv_usec / 1000);
 	#endif
 
 	

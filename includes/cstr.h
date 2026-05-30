@@ -180,7 +180,7 @@ public:
 
 	int nReplaceAllInstances(char *src, char *dest);
 
-	int nReplaceString(char *src, char *dest);
+	int nReplaceString(const char *src, const char *dest);
 	int Replace(char ch, CPOS startat /*= 0*/) const;
 	void NewFromString(const char* s, CPOS slen, CPOS prealloc);
 	int nLoadFromFile(char *filename);

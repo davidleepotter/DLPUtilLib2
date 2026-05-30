@@ -1622,7 +1622,7 @@ void CStr::vToUpper(void)
 * Purpose:	
 *			
 *********************************************************************/ 
-int CStr::nReplaceString(char *src, char *dest)
+int CStr::nReplaceString(const char *src, const char *dest)
 {
 	int nSrcLen = strlen(src);
 	int nDestLen = strlen(dest);
