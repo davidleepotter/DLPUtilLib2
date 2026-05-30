@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DLPUtilLib2", "DLPUtilLib2.vcxproj", "{AA66E982-3064-4D0D-813D-3CFE83C2E14B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DLPUtilLib2", "DLPUtilLib2.vcxproj", "{BDB2BAC1-57E2-4F9F-ADF3-0DE0EF88B420}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZLib", "Zlib\ZLib.vcxproj", "{3B5603D4-5018-4698-B1A8-680DC004E258}"
 EndProject
@@ -12,10 +12,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AA66E982-3064-4D0D-813D-3CFE83C2E14B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AA66E982-3064-4D0D-813D-3CFE83C2E14B}.Debug|Win32.Build.0 = Debug|Win32
-		{AA66E982-3064-4D0D-813D-3CFE83C2E14B}.Release|Win32.ActiveCfg = Release|Win32
-		{AA66E982-3064-4D0D-813D-3CFE83C2E14B}.Release|Win32.Build.0 = Release|Win32
+		{BDB2BAC1-57E2-4F9F-ADF3-0DE0EF88B420}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BDB2BAC1-57E2-4F9F-ADF3-0DE0EF88B420}.Debug|Win32.Build.0 = Debug|Win32
+		{BDB2BAC1-57E2-4F9F-ADF3-0DE0EF88B420}.Release|Win32.ActiveCfg = Release|Win32
+		{BDB2BAC1-57E2-4F9F-ADF3-0DE0EF88B420}.Release|Win32.Build.0 = Release|Win32
 		{3B5603D4-5018-4698-B1A8-680DC004E258}.Debug|Win32.ActiveCfg = Debug|Win32
 		{3B5603D4-5018-4698-B1A8-680DC004E258}.Debug|Win32.Build.0 = Debug|Win32
 		{3B5603D4-5018-4698-B1A8-680DC004E258}.Release|Win32.ActiveCfg = Release|Win32
