@@ -17,8 +17,8 @@ public:
 	CDLPSize(CDLPSize& s);
 	CDLPSize(CDLPSize* s);
 #ifdef WIN32
-	CDLPSize(tagSIZE &s);
-	CDLPSize(tagSIZE *s);
+	CDLPSize(SIZE &s);
+	CDLPSize(SIZE *s);
 #endif	
 	virtual ~CDLPSize();
 	
@@ -55,8 +55,8 @@ public:
 	CDLPPoint(CDLPPoint& s);
 	CDLPPoint(CDLPPoint* s);
 #ifdef WIN32
-	CDLPPoint(tagPOINT &s);
-	CDLPPoint(tagPOINT *s);
+	CDLPPoint(POINT &s);
+	CDLPPoint(POINT *s);
 #endif	
 	virtual ~CDLPPoint();
 	
@@ -93,10 +93,10 @@ public:
 	CDLPRect(CDLPRect& s);
 	CDLPRect(CDLPRect* s);
 #ifdef WIN32
-	CDLPRect(tagRECT &s);
-	CDLPRect(tagRECT *s);
-	int nIsPtInRect(tagPOINT& s);
-	int nIsPtInRect(tagPOINT* s);
+	CDLPRect(RECT &s);
+	CDLPRect(RECT *s);
+	int nIsPtInRect(POINT& s);
+	int nIsPtInRect(POINT* s);
 #endif
 	long nGetX(void);
 	long nGetY(void);
@@ -231,5 +231,6 @@ public:
 };
 
 #endif // !defined(AFX_DLPRECT_H__362B30C3_BB71_4120_A9EE_360545B09987__INCLUDED_)
+
 
 
