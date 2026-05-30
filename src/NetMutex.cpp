@@ -22,7 +22,7 @@ long CNetMutex::uID = 0;
 //	Constructor
 //
 //////////////////////////////////////////////////////
-CNetMutex::CNetMutex(CDebugInfo *potDebug,int nMutexDebugInfo, char *pName)
+CNetMutex::CNetMutex(CDebugInfo *potDebug,int nMutexDebugInfo, const char *pName)
 {
 	nDebugInfo = nMutexDebugInfo;
 	poDebug = potDebug;

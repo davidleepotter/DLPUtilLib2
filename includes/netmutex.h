@@ -47,7 +47,7 @@ private:
 	CStr *poName;
 
 public:
-	CNetMutex(CDebugInfo *poDebug,int nPrintDebugInfo, char * pName);
+	CNetMutex(CDebugInfo *poDebug,int nPrintDebugInfo, const char * pName);
 	virtual ~CNetMutex();
 
 	void vSetMutex(void);
