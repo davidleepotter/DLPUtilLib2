@@ -168,7 +168,7 @@ public:
 	CStr Mid(CPOS start, CPOS length) const;
 	CStr Mid(CPOS start) const { return Mid(start, GetLength() - start); }
 	int  Find (char ch, CPOS startat = 0) const;
-	int  Find(char *lpszSub, int nStart) const;
+	int  Find(const char *lpszSub, int nStart) const;
 	int  ReverseFind (char ch, CPOS startat = (CPOS) -1) const;
 	int  Compare (const char* match) const;			// -1, 0 or 1
 	int  CompareNoCase (const char* match) const;	// -1, 0 or 1

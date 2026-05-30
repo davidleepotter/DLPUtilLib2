@@ -712,7 +712,7 @@ void CStr::TruncateAt(CPOS idx)
 /*********************************************************************
 * Proc:		find
 *********************************************************************/ 
-int CStr::Find(char *lpszSub, int nStart) const
+int CStr::Find(const char *lpszSub, int nStart) const
 {
     int     nLength = GetLength();
     

@@ -189,9 +189,9 @@ public:
 
 	int nNumOfType(int nType);
 
-	static char * pItemTypes[];
-	static char * pGroupTypes[];
-	int nFindGroupType(char *type);
+	static const char * pItemTypes[];
+	static const char * pGroupTypes[];
+	int nFindGroupType(const char *type);
 
 	DLP_CPtrList *varItems;
 	CNTok(CDebugInfo *poDebug);

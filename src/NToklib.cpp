@@ -1917,7 +1917,7 @@ return nVal;
 //	Find Group Type
 //
 //////////////////////////////////////////////////////
-int CNTok::nFindGroupType(char *type)
+int CNTok::nFindGroupType(const char *type)
 {
 	CStr oStr;
 	for(int i=0; i<A_TYPE__TOTAL; i++)
@@ -1961,7 +1961,7 @@ return poTok;
 //	Item Types
 //
 //////////////////////////////////////////////////////
-char * CNTok::pItemTypes[] =
+const char * CNTok::pItemTypes[] =
 {
 	"Word",
 	"Int",
@@ -1982,7 +1982,7 @@ char * CNTok::pItemTypes[] =
 //	Group Types
 //
 //////////////////////////////////////////////////////
-char *CNTok::pGroupTypes[] =
+const char *CNTok::pGroupTypes[] =
 {
 	"TypeWord",
 	"TypeInt",
