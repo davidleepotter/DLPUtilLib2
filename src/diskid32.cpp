@@ -977,7 +977,7 @@ void PrintIdeInfo (int drive, DWORD diskdata [256])
 		//  there are 512 bytes in a sector
 	bytes = sectors * 512;
 #if defined(PRINTING_TO_CONSOLE_ALLOWED)
-	printf ("Drive Size________________________: %I64d bytes\n",
+	printf ("Drive Size________________________: %lld bytes\n",
 			bytes);
 #endif
 
@@ -1119,7 +1119,7 @@ long getHardDriveComputerID ()
 
 #ifdef PRINTING_TO_CONSOLE_ALLOWED
    printf ("\nHard Drive Serial Number__________: %s\n", HardDriveSerialNumber);
-   printf ("\nComputer ID_______________________: %I64d\n", id);
+   printf ("\nComputer ID_______________________: %lld\n", id);
 #endif // PRINTING_TO_CONSOLE_ALLOWED
 
    return (long) id;
