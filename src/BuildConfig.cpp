@@ -102,7 +102,7 @@ bool VersionStampPtrLess::operator ()(const VersionStamp* lhs,
 
 BuildConfiguration& BuildConfiguration::Instance()
 {
-  static std::auto_ptr<BuildConfiguration>
+  static std::unique_ptr<BuildConfiguration>
     instance(new BuildConfiguration);
 
   return *instance;
