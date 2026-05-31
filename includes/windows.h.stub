@@ -6,7 +6,13 @@
 
 // On Windows, use real windows.h; on Unix, provide stubs
 #ifdef _WIN32
+// Include the real Windows SDK header
+// Use a unique guard to prevent blocking the real include
+#ifndef _WINDOWS_
+#define _WINDOWS_
 #include <windows.h>
+#undef _WINDOWS_
+#endif
 #else
 #include <stdint.h>
 #include <stdarg.h>

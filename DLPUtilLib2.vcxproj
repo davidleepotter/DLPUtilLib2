@@ -225,7 +225,6 @@
     <ClInclude Include="includes\zlib.h" />
     <ClInclude Include="includes\zutil.h" />
     <!-- Windows compatibility -->
-    <ClInclude Include="includes\windows.h" />
     <ClInclude Include="includes\windows_stub.h" />
     <ClInclude Include="includes\winioctl.h" />
   </ItemGroup>
