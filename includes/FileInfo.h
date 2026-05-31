@@ -25,22 +25,31 @@ typedef long long __int64;
 
 typedef __int64 t64;
 
-// Additional Windows types needed for Linux
+// Additional Windows types needed for Linux (only define if not already provided by Windows SDK)
 #ifndef _ULONGLONG_DEFINED
 typedef uint64_t ULONGLONG;
 #define _ULONGLONG_DEFINED
 #endif
+#ifndef __LPARAM_DEFINED
 #if defined(__LP64__) || defined(_LP64)
 typedef long LPARAM;
 #else
 typedef int LPARAM;
 #endif
+#define __LPARAM_DEFINED
+#endif
+#ifndef __WPARAM_DEFINED
 #if defined(__LP64__) || defined(_LP64)
 typedef long WPARAM;
 #else
 typedef int WPARAM;
 #endif
+#define __WPARAM_DEFINED
+#endif
+#ifndef __LRESULT_DEFINED
 typedef void* LRESULT;
+#define __LRESULT_DEFINED
+#endif
 
 enum CFileInfoArraySort {
     AP_NOSORT = 0,
