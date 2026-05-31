@@ -25,30 +25,33 @@ typedef long long __int64;
 
 typedef __int64 t64;
 
-// Additional Windows types needed for Linux (only define if not already provided by Windows SDK)
+// Additional Windows types needed for Linux builds only
+// On Windows, these are already defined by the Windows SDK
 #ifndef _ULONGLONG_DEFINED
 typedef uint64_t ULONGLONG;
 #define _ULONGLONG_DEFINED
 #endif
-#ifndef __LPARAM_DEFINED
+
+// Only define these types if they're not already defined by Windows SDK
+// Windows SDK uses __LPARAM_DEFINED__ (with trailing underscores)
+#ifndef __LPARAM_DEFINED__
 #if defined(__LP64__) || defined(_LP64)
 typedef long LPARAM;
 #else
 typedef int LPARAM;
 #endif
-#define __LPARAM_DEFINED
 #endif
-#ifndef __WPARAM_DEFINED
+
+#ifndef __WPARAM_DEFINED__
 #if defined(__LP64__) || defined(_LP64)
 typedef long WPARAM;
 #else
 typedef int WPARAM;
 #endif
-#define __WPARAM_DEFINED
 #endif
-#ifndef __LRESULT_DEFINED
-typedef void* LRESULT;
-#define __LRESULT_DEFINED
+
+#ifndef __LRESULT_DEFINED__
+typedef LONG_PTR LRESULT;
 #endif
 
 enum CFileInfoArraySort {
@@ -59,8 +62,12 @@ enum CFileInfoArraySort {
     AP_SORTBYSIZE = 4
 };
 
+// NTSTATUS is defined by Windows SDK in ntdef.h/bcrypt.h
+// Only define if not already defined
 #ifndef _DLP_NTSTATUS_DEFINED
+#ifndef NTSTATUS
 typedef DWORD NTSTATUS;
+#endif
 #define _DLP_NTSTATUS_DEFINED
 #endif
 
